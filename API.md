@@ -27,7 +27,7 @@
 
 | work_id | date     | data             | title   | description | type | is_public |
 | ------- | -------- | ---------------- | ------- | ----------- | ---- | --------- |
-| INT(16) | DATETIME | LONGBLOB         | VARCHAR | VARCHAR     | ENUM | BOOL      |
+| INT(16) | DATETIME | JSON             | VARCHAR | VARCHAR     | ENUM | BOOL      |
 | 作品ID  | 日期时间 | 作品数据（步骤） | 标题    | 描述        | 类型 | 是否公开  |
 
 #### Table: user_stars

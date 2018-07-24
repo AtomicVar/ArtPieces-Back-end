@@ -16,6 +16,7 @@ const User = sequelize.define('user', {
         autoIncrement: true,
         primaryKey: true,
     },
+    email: Sequelize.STRING,
     nick_name: Sequelize.STRING(10),
     activ_status: Sequelize.BOOLEAN,
     password: Sequelize.STRING(40),
@@ -37,7 +38,14 @@ const Work = sequelize.define('work', {
     description: Sequelize.TEXT,
     data: Sequelize.JSON,
     date_time: Sequelize.DATE,
+    is_public: Sequelize.BOOLEAN,
+    type: Sequelize.ENUM('PLAIN', 'TUTORIAL'),
 });
+
+const User_Relation = sequelize.define('user_relation', {
+    user_id: Sequelize.INTEGER,
+    following_id: Sequelize.INTEGER,
+})
 
 if (process.env.NODE_ENV == 'dev') {
     sequelize.sync({ force: true });
@@ -49,4 +57,5 @@ module.exports = {
     User: User,
     User_Work: User_Work,
     Work: Work,
+    User_Relation: User_Relation,
 };
