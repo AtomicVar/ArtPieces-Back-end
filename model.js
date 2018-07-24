@@ -35,7 +35,7 @@ const Work = sequelize.define('work', {
     },
     title: Sequelize.STRING,
     description: Sequelize.TEXT,
-    data: Sequelize.ARRAY(Sequelize.JSON),
+    data: Sequelize.JSON,
     date_time: Sequelize.DATE,
 });
 
