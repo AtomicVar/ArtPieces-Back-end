@@ -1,12 +1,19 @@
 const db = require('./dbhandler');
 
-const getWork = async (obj, args, context, info) => {
-    return {
-        author: 1234,
-        title: "yoyo",
-    }
+const getWorkInfo = async (obj, args, context, info) => {
+
+}
+
+const getUserInfo = async (obj, args, context, info) => {
+
+}
+
+const getUserWorks = async (obj, args, context, info) => {
+
 }
 
 module.exports = {
-    getWork: getWork
+    getWorkInfo: getWorkInfo,
+    getUserInfo: getUserInfo,
+    getUserWorks: getUserWorks,
 }

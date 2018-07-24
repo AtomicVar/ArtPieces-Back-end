@@ -7,28 +7,44 @@ misc.showPrompt();
 
 const typeDefs = gql`
   scalar Date
+  scalar workData
 
   enum workType {
-    plain
-    tutorial
+    PLAIN 
+    TUTOR
+  }
+
+  type User {
+    user_id: Int
+    nick_name: String
   }
 
   type Work {
+    work_id: Int
     title: String
+    description: String
     author: Int
-    data: String
+    data: workData
     dateTime: Date
     type: workType
   }
 
+  type MetaData {
+    access_token: String
+  }
+
   type Query {
-    getWork(workID: Int!): Work
+    getWorkInfo(work_id: Int!): Work
+    getUserInfo(user_id: Int!): User
+    getUserWorks(user_id: Int!): [Work]
   }
 `;
 
 const resolvers = {
   Query: {
-    getWork: controller.getWork,
+    getWorkInfo: controller.getWorkInfo,
+    getUserInfo: controller.getUserInfo,
+    getUserWorks: controller.getUserWorks,
   },
 };
 
