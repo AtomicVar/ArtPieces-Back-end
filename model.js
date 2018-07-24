@@ -47,13 +47,8 @@ const User_Relation = sequelize.define('user_relation', {
     following_id: Sequelize.INTEGER,
 })
 
-if (process.env.NODE_ENV == 'dev') {
-    sequelize.sync({ force: true });
-} else {
-    sequelize.sync();
-}
-
 module.exports = {
+    sequelize: sequelize,
     User: User,
     User_Work: User_Work,
     Work: Work,

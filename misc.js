@@ -1,5 +1,6 @@
 require('colors');
 const readlineSync = require('readline-sync');
+const sequelize = require('./model').sequelize;
 
 const showPrompt = () => {
     /* showPrompt: Ask the user to choose from Dev Mode and Production Mode
@@ -21,6 +22,12 @@ const showPrompt = () => {
     } else {
         process.env.NODE_ENV = 'prod';
         console.log('Production Mode'.green + '. Everything will be fine.');
+    }
+
+    if (process.env.NODE_ENV == 'dev') {
+        sequelize.sync({ force: true });
+    } else {
+        sequelize.sync();
     }
 };
 
