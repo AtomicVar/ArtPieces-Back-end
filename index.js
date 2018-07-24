@@ -29,14 +29,17 @@ const typeDefs = gql`
     type: workType
   }
 
-  type MetaData {
-    access_token: String
-  }
-
   type Query {
     getWorkInfo(work_id: Int!): Work
     getUserInfo(user_id: Int!): User
     getUserWorks(user_id: Int!): [Work]
+  }
+
+  type Mutation {
+    signUp(email: String!, nick_name: String!, password: String!): Int
+    updateUserInfo(user_id: Int!, nick_name: String): Boolean
+    updateWorkData(work_id: Int!, work_data: workData): Boolean
+    uploadNewWork(user_id: Int!, work_data: workData): Int
   }
 `;
 
@@ -45,6 +48,13 @@ const resolvers = {
     getWorkInfo: controller.getWorkInfo,
     getUserInfo: controller.getUserInfo,
     getUserWorks: controller.getUserWorks,
+  },
+
+  Mutation: {
+    signUp: controller.signUp,
+    updateUserInfo: controller.updateUserInfo,
+    updateWorkData: controller.updateWorkData,
+    uploadNewWork: controller.uploadNewWork,
   },
 };
 

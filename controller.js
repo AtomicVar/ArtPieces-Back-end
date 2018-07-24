@@ -1,19 +1,40 @@
 const db = require('./dbhandler');
+const model = require('./model');
 
-const getWorkInfo = async (obj, args, context, info) => {
-
-}
-
-const getUserInfo = async (obj, args, context, info) => {
+exports.getWorkInfo = async (obj, args, context, info) => {
 
 }
 
-const getUserWorks = async (obj, args, context, info) => {
+exports.getUserInfo = async (obj, args, context, info) => {
 
 }
 
-module.exports = {
-    getWorkInfo: getWorkInfo,
-    getUserInfo: getUserInfo,
-    getUserWorks: getUserWorks,
+exports.getUserWorks = async (obj, args, context, info) => {
+
+}
+
+exports.signUp = async (obj, args, context, info) => {
+    let email = args.email;
+    let nick_name = args.nick_name;
+    let password = args.password;
+
+    let new_user = await model.User.create({
+        email: email,
+        nick_name: nick_name,
+        activ_status: true,
+        password: password,
+    });
+    return new_user.user_id;
+}
+
+exports.updateUserInfo = async (obj, args, context, info) => {
+
+}
+
+exports.updateWorkData = async (obj, args, context, info) => {
+
+}
+
+exports.uploadNewWork = async (obj, args, context, info) => {
+
 }
