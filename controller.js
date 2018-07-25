@@ -1,8 +1,11 @@
-const db = require('./dbhandler');
 const model = require('./model');
 
 exports.getWorkInfo = async (obj, args, context, info) => {
-
+    let w = await model.Work.findOne({
+        attributes: ['work_id', 'title', 'description', 'data', 'date_time', 'type'],
+        where: {work_id: args.work_id},
+    });
+    return w;
 }
 
 exports.getUserInfo = async (obj, args, context, info) => {

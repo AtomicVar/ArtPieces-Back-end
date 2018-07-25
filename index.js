@@ -25,7 +25,7 @@ const typeDefs = gql`
     title: String
     description: String
     data: workData
-    dateTime: Date
+    date_time: Date
     type: workType
   }
 
