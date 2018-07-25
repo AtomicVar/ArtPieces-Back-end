@@ -38,8 +38,10 @@ const typeDefs = gql`
   type Mutation {
     signUp(email: String!, nick_name: String!, password: String!): Int
     updateUserInfo(user_id: Int!, nick_name: String): Boolean
-    updateWorkData(work_id: Int!, work_data: workData!): Boolean
-    uploadNewWork(user_id: Int!, work_data: workData!): Int
+    updateWorkInfo(work_id: Int!, data: workData, title: String,
+      description: String): Boolean
+    uploadNewWork(user_id: Int!, data: workData!, title: String!,
+      description: String!, is_pub: Boolean!, type: workType!): Int
   }
 `;
 
@@ -53,7 +55,7 @@ const resolvers = {
   Mutation: {
     signUp: controller.signUp,
     updateUserInfo: controller.updateUserInfo,
-    updateWorkData: controller.updateWorkData,
+    updateWorkInfo: controller.updateWorkInfo,
     uploadNewWork: controller.uploadNewWork,
   },
 };

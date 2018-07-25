@@ -35,10 +35,33 @@ exports.updateUserInfo = async (obj, args, context, info) => {
 
 }
 
-exports.updateWorkData = async (obj, args, context, info) => {
-
+exports.updateWorkInfo = async (obj, args, context, info) => {
+    let w = await model.Work.findOne({
+        where: {work_id: args.work_id},
+    });
+    if (args.data)
+        await w.update({data: args.data});
+    if (args.title)
+        await w.update({title: args.title});
+    if (args.description)
+        await w.update({description: args.description});
+    return true;
 }
 
 exports.uploadNewWork = async (obj, args, context, info) => {
+    let new_work = await model.Work.create({
+        title: args.title,
+        description: args.description,
+        data: args.data,
+        date_tile: new Date(),
+        is_public: args.is_pub,
+        type: args.type,
+    });
 
+    await model.User_Work.create({
+        user_id: args.user_id,
+        work_id: new_work.work_id,
+    });
+
+    return new_work.work_id;
 }
