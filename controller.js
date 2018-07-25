@@ -6,7 +6,11 @@ exports.getWorkInfo = async (obj, args, context, info) => {
 }
 
 exports.getUserInfo = async (obj, args, context, info) => {
-
+    let u = await model.User.findOne({
+        attributes: ['user_id', 'nick_name'],
+        where: {user_id: args.user_id},
+    });
+    return u;
 }
 
 exports.getUserWorks = async (obj, args, context, info) => {
