@@ -38,8 +38,8 @@ const typeDefs = gql`
   type Mutation {
     signUp(email: String!, nick_name: String!, password: String!): Int
     updateUserInfo(user_id: Int!, nick_name: String): Boolean
-    updateWorkData(work_id: Int!, work_data: workData): Boolean
-    uploadNewWork(user_id: Int!, work_data: workData): Int
+    updateWorkData(work_id: Int!, work_data: workData!): Boolean
+    uploadNewWork(user_id: Int!, work_data: workData!): Int
   }
 `;
 
