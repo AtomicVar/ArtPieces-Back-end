@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server');
+const { GraphQLScalarType, Kind } = require('graphql');
 const controller = require('./controller');
 const misc = require('./misc');
 
@@ -23,7 +24,6 @@ const typeDefs = gql`
     work_id: Int
     title: String
     description: String
-    author: Int
     data: workData
     dateTime: Date
     type: workType
@@ -37,9 +37,9 @@ const typeDefs = gql`
 
   type Mutation {
     signUp(email: String!, nick_name: String!, password: String!): Int
-    updateUserInfo(user_id: Int!, nick_name: String): Boolean
+    updateUserInfo(user_id: Int!, nick_name: String): User 
     updateWorkInfo(work_id: Int!, data: workData, title: String,
-      description: String): Boolean
+      description: String): Work 
     uploadNewWork(user_id: Int!, data: workData!, title: String!,
       description: String!, is_pub: Boolean!, type: workType!): Int
   }

@@ -32,11 +32,18 @@ exports.signUp = async (obj, args, context, info) => {
 }
 
 exports.updateUserInfo = async (obj, args, context, info) => {
-
+    let u = await model.User.findOne({
+        attributes: ['user_id', 'nick_name'],
+        where: {user_id: args.user_id},
+    });
+    if (args.nick_name)
+        await u.update({nick_name: args.nick_name});
+    return u;
 }
 
 exports.updateWorkInfo = async (obj, args, context, info) => {
     let w = await model.Work.findOne({
+        attributes: ['work_id', 'title','description', 'type'],
         where: {work_id: args.work_id},
     });
     if (args.data)
@@ -45,7 +52,7 @@ exports.updateWorkInfo = async (obj, args, context, info) => {
         await w.update({title: args.title});
     if (args.description)
         await w.update({description: args.description});
-    return true;
+    return w;
 }
 
 exports.uploadNewWork = async (obj, args, context, info) => {
