@@ -1,6 +1,6 @@
-require('colors');
-const readlineSync = require('readline-sync');
-const sequelize = require('./model').sequelize;
+import 'colors';
+import { question } from 'readline-sync';
+import { sequelize } from './model';
 
 const showPrompt = () => {
     /* showPrompt: Ask the user to choose from Dev Mode and Production Mode
@@ -10,7 +10,7 @@ const showPrompt = () => {
      */
 
     if (process.argv[2] == 'dev') {
-        let szAns = readlineSync.question(
+        let szAns = question(
             'Are you sure to switch to' + ' DEV '.red + 'mode? It will' + ' erase '.red + 'the database!(y/n)');
         if (szAns == 'y') {
             process.env.NODE_ENV = 'dev';
@@ -31,6 +31,4 @@ const showPrompt = () => {
     }
 };
 
-module.exports = {
-    showPrompt: showPrompt
-};
+export { showPrompt };

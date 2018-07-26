@@ -1,10 +1,9 @@
-const { ApolloServer, gql } = require('apollo-server');
-const { GraphQLScalarType, Kind } = require('graphql');
-const controller = require('./controller');
-const misc = require('./misc');
+import { ApolloServer, gql } from 'apollo-server';
+import * as controller from './controller';
+import { showPrompt } from './misc';
 
 /* Show prompt before starting the server. */
-misc.showPrompt();
+showPrompt();
 
 const typeDefs = gql`
   scalar Date
@@ -46,22 +45,22 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
-  Query: {
-    getWorkInfo: controller.getWorkInfo,
-    getUserInfo: controller.getUserInfo,
-    getUserWorks: controller.getUserWorks,
-  },
+    Query: {
+        getWorkInfo: controller.getWorkInfo,
+        getUserInfo: controller.getUserInfo,
+        getUserWorks: controller.getUserWorks,
+    },
 
-  Mutation: {
-    signUp: controller.signUp,
-    updateUserInfo: controller.updateUserInfo,
-    updateWorkInfo: controller.updateWorkInfo,
-    uploadNewWork: controller.uploadNewWork,
-  },
+    Mutation: {
+        signUp: controller.signUp,
+        updateUserInfo: controller.updateUserInfo,
+        updateWorkInfo: controller.updateWorkInfo,
+        uploadNewWork: controller.uploadNewWork,
+    },
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
 server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
+    console.log(`🚀  Server ready at ${url}`);
 });

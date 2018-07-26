@@ -1,30 +1,30 @@
-const model = require('./model');
+import * as model from './model';
 
-exports.getWorkInfo = async (obj, args, context, info) => {
+const getWorkInfo = async (obj, args) => {
     let w = await model.Work.findOne({
         attributes: ['work_id', 'title', 'description', 'data', 'date_time', 'type'],
-        where: {work_id: args.work_id},
+        where: { work_id: args.work_id },
     });
     return w;
-}
+};
 
-exports.getUserInfo = async (obj, args, context, info) => {
+const getUserInfo = async (obj, args) => {
     let u = await model.User.findOne({
         attributes: ['user_id', 'nick_name'],
-        where: {user_id: args.user_id},
+        where: { user_id: args.user_id },
     });
     return u;
-}
+};
 
-exports.getUserWorks = async (obj, args, context, info) => {
+const getUserWorks = async (obj, args) => {
     let ws = model.Work.findAll({
         attributes: ['work_id', 'title', 'description', 'data', 'date_time', 'type'],
-        where: {user_id: args.user_id},
+        where: { user_id: args.user_id },
     });
     return ws;
-}
+};
 
-exports.signUp = async (obj, args, context, info) => {
+const signUp = async (obj, args) => {
     let email = args.email;
     let nick_name = args.nick_name;
     let password = args.password;
@@ -36,33 +36,33 @@ exports.signUp = async (obj, args, context, info) => {
         password: password,
     });
     return new_user.user_id;
-}
+};
 
-exports.updateUserInfo = async (obj, args, context, info) => {
+const updateUserInfo = async (obj, args) => {
     let u = await model.User.findOne({
         attributes: ['user_id', 'nick_name'],
-        where: {user_id: args.user_id},
+        where: { user_id: args.user_id },
     });
     if (args.nick_name)
-        await u.update({nick_name: args.nick_name});
+        await u.update({ nick_name: args.nick_name });
     return u;
-}
+};
 
-exports.updateWorkInfo = async (obj, args, context, info) => {
+const updateWorkInfo = async (obj, args) => {
     let w = await model.Work.findOne({
-        attributes: ['work_id', 'title','description', 'type'],
-        where: {work_id: args.work_id},
+        attributes: ['work_id', 'title', 'description', 'type'],
+        where: { work_id: args.work_id },
     });
     if (args.data)
-        await w.update({data: args.data});
+        await w.update({ data: args.data });
     if (args.title)
-        await w.update({title: args.title});
+        await w.update({ title: args.title });
     if (args.description)
-        await w.update({description: args.description});
+        await w.update({ description: args.description });
     return w;
-}
+};
 
-exports.uploadNewWork = async (obj, args, context, info) => {
+const uploadNewWork = async (obj, args) => {
     let new_work = await model.Work.create({
         title: args.title,
         description: args.description,
@@ -74,4 +74,9 @@ exports.uploadNewWork = async (obj, args, context, info) => {
     });
 
     return new_work.work_id;
-}
+};
+
+export {
+    getUserInfo, getWorkInfo, getUserWorks, signUp, updateUserInfo,
+    updateWorkInfo, uploadNewWork
+};

@@ -1,9 +1,8 @@
-const Sequelize = require('sequelize');
-const config = require('./config');
+import Sequelize, { INTEGER, STRING, BOOLEAN, TEXT, JSON, DATE, ENUM } from 'sequelize';
 
-const sequelize = new Sequelize(config.database, config.username, config.password, {
-    host: config.host,
-    dialect: config.dialect,
+const sequelize = new Sequelize('art', 'art', 'art', {
+    host: 'localhost',
+    dialect: 'mysql',
     define: {
         timestamps: false,
     },
@@ -11,42 +10,37 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 
 const User = sequelize.define('user', {
     user_id: {
-        type: Sequelize.INTEGER,
+        type: INTEGER,
         unique: true,
         autoIncrement: true,
         primaryKey: true,
     },
-    email: Sequelize.STRING,
-    nick_name: Sequelize.STRING(10),
-    activ_status: Sequelize.BOOLEAN,
-    password: Sequelize.STRING(40),
+    email: STRING,
+    nick_name: STRING(10),
+    activ_status: BOOLEAN,
+    password: STRING(40),
 });
 
 const Work = sequelize.define('work', {
     work_id: {
-        type: Sequelize.INTEGER,
+        type: INTEGER,
         unique: true,
         autoIncrement: true,
         primaryKey: true,
     },
-    title: Sequelize.STRING,
-    description: Sequelize.TEXT,
-    data: Sequelize.JSON,
-    date_time: Sequelize.DATE,
-    is_public: Sequelize.BOOLEAN,
-    type: Sequelize.ENUM('PLAIN', 'TUTORIAL'),
+    title: STRING,
+    description: TEXT,
+    data: JSON,
+    date_time: DATE,
+    is_public: BOOLEAN,
+    type: ENUM('PLAIN', 'TUTORIAL'),
 });
 
 const User_Relation = sequelize.define('user_relation', {
-    user_id: Sequelize.INTEGER,
-    following_id: Sequelize.INTEGER,
-})
+    user_id: INTEGER,
+    following_id: INTEGER,
+});
 
-Work.belongsTo(User, {foreignKey: 'user_id'});
+Work.belongsTo(User, { foreignKey: 'user_id' });
 
-module.exports = {
-    sequelize: sequelize,
-    User: User,
-    Work: Work,
-    User_Relation: User_Relation,
-};
+export { sequelize, User, Work, User_Relation };
