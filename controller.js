@@ -17,7 +17,11 @@ exports.getUserInfo = async (obj, args, context, info) => {
 }
 
 exports.getUserWorks = async (obj, args, context, info) => {
-
+    let ws = model.Work.findAll({
+        attributes: ['work_id', 'title', 'description', 'data', 'date_time', 'type'],
+        where: {user_id: args.user_id},
+    });
+    return ws;
 }
 
 exports.signUp = async (obj, args, context, info) => {
@@ -66,11 +70,7 @@ exports.uploadNewWork = async (obj, args, context, info) => {
         date_tile: new Date(),
         is_public: args.is_pub,
         type: args.type,
-    });
-
-    await model.User_Work.create({
         user_id: args.user_id,
-        work_id: new_work.work_id,
     });
 
     return new_work.work_id;
