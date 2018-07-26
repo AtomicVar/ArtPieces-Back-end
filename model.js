@@ -22,11 +22,6 @@ const User = sequelize.define('user', {
     password: Sequelize.STRING(40),
 });
 
-const User_Work = sequelize.define('user_work', {
-    user_id: Sequelize.INTEGER,
-    work_id: Sequelize.INTEGER,
-});
-
 const Work = sequelize.define('work', {
     work_id: {
         type: Sequelize.INTEGER,
@@ -47,10 +42,11 @@ const User_Relation = sequelize.define('user_relation', {
     following_id: Sequelize.INTEGER,
 })
 
+Work.belongsTo(User, {foreignKey: 'user_id'});
+
 module.exports = {
     sequelize: sequelize,
     User: User,
-    User_Work: User_Work,
     Work: Work,
     User_Relation: User_Relation,
 };
