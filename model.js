@@ -1,6 +1,6 @@
 import Sequelize, { INTEGER, STRING, BOOLEAN, TEXT, JSON, DATE, ENUM } from 'sequelize';
 
-const sequelize = new Sequelize('art', 'art', 'art', {
+const sequelize = new Sequelize(/*database*/ 'art', /*username*/ 'art', /*password*/ 'art', {
     host: 'localhost',
     dialect: 'mysql',
     define: {
