@@ -19,26 +19,26 @@ const typeDefs = gql`
     name: String
   }
 
-  type Work {
-    work_id: Int
+  type Artwork {
+    id: Int
     title: String
     description: String
     data: workData
-    date_time: Date
+    timestamp: Date
     type: workType
   }
 
   type Query {
-    getWorkInfo(work_id: Int!): Work
+    getWorkInfo(id: Int!): Artwork
     getUserInfo(user_id: Int!): User
-    getUserWorks(user_id: Int!): [Work]
+    getUserWorks(user_id: Int!): [Artwork]
   }
 
   type Mutation {
     signUp(email: String!, name: String!, password: String!): Int
     updateUserInfo(user_id: Int!, name: String): User 
-    updateWorkInfo(work_id: Int!, data: workData, title: String,
-      description: String): Work 
+    updateWorkInfo(id: Int!, data: workData, title: String,
+      description: String): Artwork 
     uploadNewWork(user_id: Int!, data: workData!, title: String!,
       description: String!, is_pub: Boolean!, type: workType!): Int
   }

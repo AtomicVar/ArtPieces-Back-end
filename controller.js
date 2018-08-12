@@ -1,9 +1,9 @@
 import * as model from './model';
 
 const getWorkInfo = async (obj, args) => {
-    let w = await model.Work.findOne({
-        attributes: ['work_id', 'title', 'description', 'data', 'date_time', 'type'],
-        where: { work_id: args.work_id },
+    let w = await model.Artwork.findOne({
+        attributes: ['id', 'title', 'description', 'data', 'timestamp', 'type'],
+        where: { id: args.id },
     });
     return w;
 };
@@ -17,8 +17,8 @@ const getUserInfo = async (obj, args) => {
 };
 
 const getUserWorks = async (obj, args) => {
-    let ws = model.Work.findAll({
-        attributes: ['work_id', 'title', 'description', 'data', 'date_time', 'type'],
+    let ws = model.Artwork.findAll({
+        attributes: ['id', 'title', 'description', 'data', 'timestamp', 'type'],
         where: { user_id: args.user_id },
     });
     return ws;
@@ -49,9 +49,9 @@ const updateUserInfo = async (obj, args) => {
 };
 
 const updateWorkInfo = async (obj, args) => {
-    let w = await model.Work.findOne({
-        attributes: ['work_id', 'title', 'description', 'type'],
-        where: { work_id: args.work_id },
+    let w = await model.Artwork.findOne({
+        attributes: ['id', 'title', 'description'],
+        where: { id: args.id },
     });
     if (args.data)
         await w.update({ data: args.data });
@@ -63,7 +63,7 @@ const updateWorkInfo = async (obj, args) => {
 };
 
 const uploadNewWork = async (obj, args) => {
-    let new_work = await model.Work.create({
+    let new_work = await model.Artwork.create({
         title: args.title,
         description: args.description,
         data: args.data,
@@ -73,7 +73,7 @@ const uploadNewWork = async (obj, args) => {
         user_id: args.user_id,
     });
 
-    return new_work.work_id;
+    return new_work.id;
 };
 
 export {

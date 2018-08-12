@@ -1,6 +1,6 @@
-import Sequelize, { INTEGER, STRING, BOOLEAN, TEXT, JSON, DATE, ENUM } from 'sequelize';
+import Sequelize, { UUID, STRING, TEXT, DATE, BLOB, JSON } from 'sequelize';
 
-const sequelize = new Sequelize(/*database*/ 'art', /*username*/ 'art', /*password*/ 'art', {
+const sequelize = new Sequelize('art', 'art', 'art', {
     host: 'localhost',
     dialect: 'mysql',
     define: {
@@ -9,38 +9,65 @@ const sequelize = new Sequelize(/*database*/ 'art', /*username*/ 'art', /*passwo
 });
 
 const User = sequelize.define('user', {
-    user_id: {
-        type: INTEGER,
-        unique: true,
-        autoIncrement: true,
-        primaryKey: true,
+    email: {
+        type: STRING,
+        primaryKey: true
     },
-    email: STRING,
-    name: STRING(10),
-    activ_status: BOOLEAN,
-    password: STRING(40),
+    name: STRING,
+    password: STRING,
+    portrait: BLOB,
 });
 
-const Work = sequelize.define('work', {
-    work_id: {
-        type: INTEGER,
-        unique: true,
-        autoIncrement: true,
+const Artwork = sequelize.define('artwork', {
+    id: {
+        type: UUID,
         primaryKey: true,
     },
     title: STRING,
     description: TEXT,
-    data: JSON,
-    date_time: DATE,
-    is_public: BOOLEAN,
-    type: ENUM('PLAIN', 'TUTORIAL'),
+    user: STRING,
+    timestamp: DATE,
+    picture: BLOB,
 });
 
-const User_Relation = sequelize.define('user_relation', {
-    user_id: INTEGER,
-    following_id: INTEGER,
+const Repo = sequelize.define('repo', {
+    id: {
+        type: UUID,
+        primaryKey: true,
+    },
+    title: STRING,
+    root: UUID,
+    user: STRING,
+    timestamp: DATE,
 });
 
-Work.belongsTo(User, { foreignKey: 'user_id' });
+const Lecture = sequelize.define('lecture', {
+    id: {
+        type: UUID,
+        primaryKey: true,
+    },
+    artwork: UUID,
+    title: STRING,
+    description: STRING,
+    steps: JSON,
+    user: STRING,
+    timestamp: DATE,
+});
 
-export { sequelize, User, Work, User_Relation };
+const Fllw_Relation = sequelize.define('fllw_relation', {
+    user: STRING,
+    follow: STRING,
+});
+
+const Star_Relation = sequelize.define('star_relation', {
+    user: STRING,
+    artwork: UUID,
+});
+
+const Repo_Childwork = sequelize.define('repo_childwork', {
+    repo: UUID,
+    artwork: UUID,
+});
+
+export { sequelize, User, Artwork, Lecture, Repo, Fllw_Relation, Star_Relation,
+    Repo_Childwork };
