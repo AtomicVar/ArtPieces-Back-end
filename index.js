@@ -16,7 +16,7 @@ const typeDefs = gql`
 
   type User {
     user_id: Int
-    nick_name: String
+    name: String
   }
 
   type Work {
@@ -35,8 +35,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    signUp(email: String!, nick_name: String!, password: String!): Int
-    updateUserInfo(user_id: Int!, nick_name: String): User 
+    signUp(email: String!, name: String!, password: String!): Int
+    updateUserInfo(user_id: Int!, name: String): User 
     updateWorkInfo(work_id: Int!, data: workData, title: String,
       description: String): Work 
     uploadNewWork(user_id: Int!, data: workData!, title: String!,

@@ -4,7 +4,7 @@
 
 #### Table: users
 
-| user_id | email        | nick_name | activ_status | password |
+| user_id | email        | name | activ_status | password |
 | ------- | ------------ | --------- | ------------ | -------- |
 | INT(10) | VARCHAR      | VARCHAR   | BOOL         | CHAR(40) |
 | 用户ID  | 电子邮件地址 | 昵称      | 用户激活状态 | 密码     |

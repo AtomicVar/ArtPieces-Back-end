@@ -2,7 +2,7 @@
 
 # Sign up a new users - singUp
 mutation{
-  signUp(email: "msn4399@163.com", nick_name:"Guoshuai", password:"PFHDSJD")
+  signUp(email: "msn4399@163.com", name:"Guoshuai", password:"PFHDSJD")
 }
 
 # Upload a new work - uploadNewWork
@@ -12,8 +12,8 @@ mutation{
 
 # Update a user's infomation - updateUserInfo
 mutation{
-  updateUserInfo(user_id:1, nick_name:"bitch"){
-    nick_name
+  updateUserInfo(user_id:1, name:"bitch"){
+    name
   }
 }
 
@@ -36,7 +36,7 @@ query{
 # Query a user's infomation - getUserInfo
 query{
   getUserInfo(user_id:1){
-    nick_name
+    name
   }
 }
 

@@ -10,7 +10,7 @@ const getWorkInfo = async (obj, args) => {
 
 const getUserInfo = async (obj, args) => {
     let u = await model.User.findOne({
-        attributes: ['user_id', 'nick_name'],
+        attributes: ['user_id', 'name'],
         where: { user_id: args.user_id },
     });
     return u;
@@ -26,12 +26,12 @@ const getUserWorks = async (obj, args) => {
 
 const signUp = async (obj, args) => {
     let email = args.email;
-    let nick_name = args.nick_name;
+    let name = args.name;
     let password = args.password;
 
     let new_user = await model.User.create({
         email: email,
-        nick_name: nick_name,
+        name: name,
         activ_status: true,
         password: password,
     });
@@ -40,11 +40,11 @@ const signUp = async (obj, args) => {
 
 const updateUserInfo = async (obj, args) => {
     let u = await model.User.findOne({
-        attributes: ['user_id', 'nick_name'],
+        attributes: ['user_id', 'name'],
         where: { user_id: args.user_id },
     });
-    if (args.nick_name)
-        await u.update({ nick_name: args.nick_name });
+    if (args.name)
+        await u.update({ name: args.name });
     return u;
 };
 
