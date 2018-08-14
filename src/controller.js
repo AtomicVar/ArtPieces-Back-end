@@ -1,4 +1,5 @@
 import * as model from './model';
+import 'babel-polyfill';
 
 const getWork = async (obj, args) => {
     let work = await model.Artwork.findOne({
