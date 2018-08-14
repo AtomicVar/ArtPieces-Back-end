@@ -6,56 +6,75 @@ import { showPrompt } from './misc';
 showPrompt();
 
 const typeDefs = gql`
-  scalar Date
-  scalar workData
-
-  enum workType {
-    PLAIN 
-    TUTOR
-  }
+  scalar Datetime
+  scalar JSON
+  scalar Image
+  scalar UUID
+  scalar Msg
 
   type User {
-    user_id: Int
+    email: String
     name: String
+    portrait: Image
+    artworks: [Artwork]
+    repos: [Repo]
   }
 
   type Artwork {
-    id: Int
+    id: UUID
+    keyPhoto: Image
     title: String
     description: String
-    data: workData
-    timestamp: Date
-    type: workType
+    creator: String
+    timestamp: Datetime
+    belongingRepo: UUID
+  }
+
+  type Repo {
+    id: UUID
+    keyArtwork: Artwork
+    title: String
+    Starter: User
+    timestamp: Datetime
+    artworks: [Artwork]
+  }
+
+  type Lecture {
+    id: UUID
+    artwork: Artwork
+    title: String
+    description: String
+    timestamp: Datetime
+    creator: User
+    numberOfSteps: Int
+    steps: JSON
+    numberOfStars: Int
   }
 
   type Query {
-    getWorkInfo(id: Int!): Artwork
-    getUserInfo(user_id: Int!): User
-    getUserWorks(user_id: Int!): [Artwork]
+    getWork(id: UUID!): Artwork
+    getUser(email: String!): User
+    getRepo(id: UUID!): Repo
+    getLecture(id: UUID!): Lecture
   }
 
   type Mutation {
-    signUp(email: String!, name: String!, password: String!): Int
-    updateUserInfo(user_id: Int!, name: String): User 
-    updateWorkInfo(id: Int!, data: workData, title: String,
-      description: String): Artwork 
-    uploadNewWork(user_id: Int!, data: workData!, title: String!,
-      description: String!, is_pub: Boolean!, type: workType!): Int
+    upsertUser(email: String!, name: String!, password: String!, portrait: Image): User
+    upsertWork(email: Int!, keyPhoto: Image!, title: String!, description: String!, belongingRepo: UUID): Int
   }
 `;
 
 const resolvers = {
     Query: {
-        getWorkInfo: controller.getWorkInfo,
-        getUserInfo: controller.getUserInfo,
-        getUserWorks: controller.getUserWorks,
+        getWork: controller.getWork,
+        getUser: controller.getUser,
+        getRepo: controller.getRepo,
+        getLecture: controller.getLecture,
     },
 
     Mutation: {
-        signUp: controller.signUp,
-        updateUserInfo: controller.updateUserInfo,
-        updateWorkInfo: controller.updateWorkInfo,
-        uploadNewWork: controller.uploadNewWork,
+        upsertUser: controller.upsertUser,
+        upsertWork: controller.upsertWork,
     },
 };
 

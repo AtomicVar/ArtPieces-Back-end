@@ -61,7 +61,7 @@ const Fllw_Relation = sequelize.define('fllw_relation', {
 
 const Star_Relation = sequelize.define('star_relation', {
     user: STRING,
-    artwork: UUID,
+    lecture: UUID,
 });
 
 const Repo_Childwork = sequelize.define('repo_childwork', {
@@ -69,5 +69,7 @@ const Repo_Childwork = sequelize.define('repo_childwork', {
     artwork: UUID,
 });
 
-export { sequelize, User, Artwork, Lecture, Repo, Fllw_Relation, Star_Relation,
-    Repo_Childwork };
+export {
+    sequelize, User, Artwork, Lecture, Repo, Fllw_Relation, Star_Relation,
+    Repo_Childwork
+};

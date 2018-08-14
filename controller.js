@@ -1,69 +1,61 @@
 import * as model from './model';
 
-const getWorkInfo = async (obj, args) => {
-    let w = await model.Artwork.findOne({
-        attributes: ['id', 'title', 'description', 'data', 'timestamp', 'type'],
+const getWork = async (obj, args) => {
+    let work = await model.Artwork.findOne({
+        attributes: ['id', 'title', 'description', 'user', 'timestamp', 'picture'],
         where: { id: args.id },
     });
-    return w;
+    return work;
 };
 
-const getUserInfo = async (obj, args) => {
-    let u = await model.User.findOne({
-        attributes: ['user_id', 'name'],
-        where: { user_id: args.user_id },
+const getUser = async (obj, args) => {
+    let user = await model.User.findOne({
+        attributes: ['email', 'name', 'portrait'],
+        where: { email: args.email },
     });
-    return u;
-};
-
-const getUserWorks = async (obj, args) => {
-    let ws = model.Artwork.findAll({
-        attributes: ['id', 'title', 'description', 'data', 'timestamp', 'type'],
-        where: { user_id: args.user_id },
+    user.artworks = await model.Artwork.findAll({
+        attributes: ['id', 'title', 'description', 'user', 'timestamp', 'picture'],
+        where: { user: args.email },
     });
-    return ws;
-};
-
-const signUp = async (obj, args) => {
-    let email = args.email;
-    let name = args.name;
-    let password = args.password;
-
-    let new_user = await model.User.create({
-        email: email,
-        name: name,
-        activ_status: true,
-        password: password,
+    user.repos = await model.Repo.findAll({
+        attributes: ['id', 'title', 'root', 'title', 'user', 'timestamp'],
+        where: { user: args.email }
     });
-    return new_user.user_id;
+    return user;
 };
 
-const updateUserInfo = async (obj, args) => {
-    let u = await model.User.findOne({
-        attributes: ['user_id', 'name'],
-        where: { user_id: args.user_id },
-    });
-    if (args.name)
-        await u.update({ name: args.name });
-    return u;
-};
-
-const updateWorkInfo = async (obj, args) => {
-    let w = await model.Artwork.findOne({
-        attributes: ['id', 'title', 'description'],
+const getRepo = async (obj, args) => {
+    let repo = await model.Repo.findOne({
+        attributes: ['id', 'title', 'root', 'title', 'user', 'timestamp'],
         where: { id: args.id },
     });
-    if (args.data)
-        await w.update({ data: args.data });
-    if (args.title)
-        await w.update({ title: args.title });
-    if (args.description)
-        await w.update({ description: args.description });
-    return w;
+    return repo;
 };
 
-const uploadNewWork = async (obj, args) => {
-    let new_work = await model.Artwork.create({
+const getLecture = async (obj, args) => {
+    let lect = await model.Lecture.findOne({
+        attributes: ['id', 'artwork', 'title', 'description', 'steps', 'user', 'timestamp'],
+        where: { id: args.id },
+    });
+    lect.numberOfSteps = lect.steps.length;
+    lect.numberOfStars = await model.Star_Relation.count({
+        where: { lecture: args.id },
+    });
+    return lect;
+};
+
+const upsertUser = async (obj, args) => {
+    let user = await model.User.upsert({
+        email: args.email,
+        name: args.name,
+        password: args.password,
+        portrait: args.portrait,
+    });
+    return user;
+};
+
+const upsertWork = async (obj, args) => {
+    let work = await model.Artwork.upsert({
         title: args.title,
         description: args.description,
         data: args.data,
@@ -73,10 +65,7 @@ const uploadNewWork = async (obj, args) => {
         user_id: args.user_id,
     });
 
-    return new_work.id;
+    return work.id;
 };
 
-export {
-    getUserInfo, getWorkInfo, getUserWorks, signUp, updateUserInfo,
-    updateWorkInfo, uploadNewWork
-};
+export { getUser, getWork, getRepo, getLecture, upsertUser, upsertWork };
