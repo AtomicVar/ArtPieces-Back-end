@@ -1,4 +1,5 @@
 import * as model from './model';
+import { uuidv4 } from 'uuid/v4';
 import 'babel-polyfill';
 
 const getWork = async (obj, args) => {
@@ -55,15 +56,13 @@ const upsertUser = async (obj, args) => {
 };
 
 const upsertWork = async (obj, args) => {
-    let work = await model.Artwork.upsert({
-        id: 'xxx',
+    return await model.Artwork.upsert({
+        id: args.id ? args.id : uuidv4(),
         title: args.title,
         description: args.description,
         user: args.creator,
         timestamp: new Date(),
     });
-
-    return work.id;
 };
 
 export { getUser, getWork, getRepo, getLecture, upsertUser, upsertWork };
