@@ -46,27 +46,30 @@ const getLecture = async (obj, args) => {
 };
 
 const upsertUser = async (obj, args) => {
-    let user = await model.User.upsert({
+    return await model.User.upsert({
         email: args.email,
         name: args.name,
         password: args.password,
         portrait: args.portrait,
     });
-    return user;
 };
 
 const upsertWork = async (obj, args) => {
     let work = await model.Artwork.upsert({
+        id: 'xxx',
         title: args.title,
         description: args.description,
-        data: args.data,
-        date_tile: new Date(),
-        is_public: args.is_pub,
-        type: args.type,
-        user_id: args.user_id,
+        user: args.creator,
+        timestamp: new Date(),
     });
 
     return work.id;
 };
 
-export { getUser, getWork, getRepo, getLecture, upsertUser, upsertWork };
+const imgUpload = async (parent, { file }) => {
+    let { stream, filename, mimetype, encoding } = await file;
+
+    return { stream, filename, mimetype, encoding };
+};
+
+export { getUser, getWork, getRepo, getLecture, upsertUser, upsertWork, imgUpload };

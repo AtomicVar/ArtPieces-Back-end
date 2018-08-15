@@ -11,6 +11,11 @@ const typeDefs = gql`
   scalar Image
   scalar UUID
   scalar Msg
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }
 
   type User {
     email: String
@@ -59,8 +64,24 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    upsertUser(email: String!, name: String!, password: String!, portrait: Image): User
+    """
+    Update or insert an user.
+
+    An update will be executed if there is an old user having the same email. Otherwise a new user will be added.
+    
+    Return \`true\` if an insert is executed, \`false\` for an update.
+    """
+    upsertUser(email: String!, name: String!, password: String!, portrait: Image): Boolean
+
+    """
+    Update or insert a work.
+
+    An update will be executed if there is an old work having the same email. Otherwise a new user will be added.
+    
+    Return \`true\` if an insert is executed, \`false\` for an update.
+    """
     upsertWork(email: Int!, keyPhoto: Image!, title: String!, description: String!, belongingRepo: UUID): Int
+    imgUpload(img: Upload!): File!
   }
 `;
 
@@ -75,6 +96,7 @@ const resolvers = {
     Mutation: {
         upsertUser: controller.upsertUser,
         upsertWork: controller.upsertWork,
+        imgUpload: controller.imgUpload,
     },
 };
 
