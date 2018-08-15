@@ -1,5 +1,5 @@
 import { ApolloServer } from 'apollo-server';
-import schema from '../data/schema.graphql';
+import schema from './schema.graphql';
 import * as controller from './controller';
 import { showPrompt } from './misc';
 
@@ -19,7 +19,6 @@ const resolvers = {
     Mutation: {
         upsertUser: controller.upsertUser,
         upsertWork: controller.upsertWork,
-        imgUpload: controller.imgUpload,
     },
 };
 
