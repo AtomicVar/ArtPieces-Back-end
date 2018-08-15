@@ -66,10 +66,4 @@ const upsertWork = async (obj, args) => {
     return work.id;
 };
 
-const imgUpload = async (parent, { file }) => {
-    let { stream, filename, mimetype, encoding } = await file;
-
-    return { stream, filename, mimetype, encoding };
-};
-
-export { getUser, getWork, getRepo, getLecture, upsertUser, upsertWork, imgUpload };
+export { getUser, getWork, getRepo, getLecture, upsertUser, upsertWork };
