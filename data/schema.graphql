@@ -49,9 +49,40 @@ type Lecture {
 }
 
 type Query {
+    """
+    **Function:** Get the information of an artwork.
+
+    **Explaination:** `UUID` is a string.
+    
+    **Return:** an `Artwork`.
+    """
     getWork(id: UUID!): Artwork
+
+    """
+    **Function:** Get the information of an user.
+
+    **Explaination:** None.
+    
+    **Return:** an `User`.
+    """
     getUser(email: String!): User
+    
+    """
+    **Function:** Get the information of a repository.
+
+    **Explaination:** `UUID` is a string.
+    
+    **Return:** an `Repo`.
+    """
     getRepo(id: UUID!): Repo
+
+    """
+    **Function:** Get the information of a lecture.
+
+    **Explaination:** `UUID` is a string.
+    
+    **Return:** an `Lecture`.
+    """
     getLecture(id: UUID!): Lecture
 }
 
@@ -61,7 +92,7 @@ type Mutation {
 
     **Explaination:** An update will be executed if there is an old user having the same email. Otherwise a new user will be added.
     
-    **Return:** \`true\` if an insert is executed, \`false\` for an update.
+    **Return:** `true` if an insert is executed, `false` for an update.
     """
     upsertUser(email: String!, name: String!, password: String!, portrait: Image): Boolean
 
@@ -70,9 +101,9 @@ type Mutation {
 
     **Explaination:** An update will be executed if there is an old work having the same email. Otherwise a new user will be added.
     
-    **Return:** \`true\` if an insert is executed, \`false\` for an update.
+    **Return:** `true` if an insert is executed, `false` for an update.
     """
-    upsertWork(email: Int!, keyPhoto: Image!, title: String!, description: String!, belongingRepo: UUID): Boolean
+    upsertWork(creator: String!, keyPhoto: Image!, title: String!, description: String!, belongingRepo: UUID): Boolean
 
     imgUpload(img: Upload!): File!
 }
