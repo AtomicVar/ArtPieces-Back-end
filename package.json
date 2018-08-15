@@ -6,10 +6,10 @@
   "scripts": {
     "start": "nodemon src/app.js --exec babel-node --presets env",
     "dev": "nodemon src/app.js dev --exec babel-node --presets env",
-    "build": "babel src -d dist -s --presets env",
+    "build": "babel src -d dist -s --presets env --plugins babel-plugin-inline-import",
     "serve": "node dist/app.js"
   },
-  "author": "",
+  "author": "Guo Shuai",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.0.0",
@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-inline-import": "^3.0.0",
     "babel-preset-env": "^1.7.0",
     "nodemon": "^1.18.3"
   }
