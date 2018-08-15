@@ -11,7 +11,6 @@ const APIURL = 'http://127.0.0.1:4001/';
 
 const upload = async (ctx) => {
     ctx.response.type = 'application/json';
-    console.log("haha");
     let file = ctx.request.files[0];
     let newfile = 'files/' + path.basename(file.path) + '.png';
     fs.copyFile(file.path, newfile, (err) => { if (err) throw err; });
@@ -25,7 +24,7 @@ const upload = async (ctx) => {
 router.post('/upload', upload);
 
 app.use(logger());
-app.use(body(option = { formLimit: '10mb' }));
+app.use(body({ formLimit: '10mb' }));
 app.use(router.routes());
 app.use(serve('.'));
 
