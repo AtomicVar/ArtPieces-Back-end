@@ -22,5 +22,6 @@ URL: ip:port/upload
 描述：
 ```
 HTTP Method: GET
-URL: ip:port/example.png
+URL: ip:port/files/example.png
+URL例子：ip:port/files/upload_7d6c8dd1359dfd6ade797be8ad4c880d.png
 ```
