@@ -1,7 +1,7 @@
 scalar Datetime
 scalar JSON
-scalar Image
 scalar UUID
+scalar URL
 
 type File {
     filename: String!
@@ -12,14 +12,14 @@ type File {
 type User {
     email: String
     name: String
-    portrait: Image
+    portrait: URL
     artworks: [Artwork]
     repos: [Repo]
 }
 
 type Artwork {
     id: UUID
-    keyPhoto: Image
+    keyPhoto: URL
     title: String
     description: String
     creator: String
@@ -94,7 +94,7 @@ type Mutation {
     
     **Return:** `true` if an insert is executed, `false` for an update.
     """
-    upsertUser(email: String!, name: String!, password: String!, portrait: Image): Boolean
+    upsertUser(email: String!, name: String!, password: String!, portrait: URL): Boolean
 
     """
     **Function:** Update or insert a work.
@@ -103,7 +103,5 @@ type Mutation {
     
     **Return:** `true` if an insert is executed, `false` for an update.
     """
-    upsertWork(creator: String!, keyPhoto: Image!, title: String!, description: String!, belongingRepo: UUID): Boolean
-
-    imgUpload(img: Upload!): File!
+    upsertWork(creator: String!, keyPhoto: URL!, title: String!, description: String!, belongingRepo: UUID): Boolean
 }
