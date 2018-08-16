@@ -70,6 +70,6 @@ const uploadServer = http.createServer((req, res) => {
     }
 });
 
-uploadServer.listen(4001, 'localhost', () => {
+uploadServer.listen(4001, '0.0.0.0',  'localhost', () => {
     console.log('Upload server started...');
 });
