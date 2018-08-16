@@ -99,9 +99,18 @@ type Mutation {
     """
     **Function:** Update or insert a work.
 
-    **Explaination:** An update will be executed if there is an old work having the same email. Otherwise a new user will be added.
+    **Explaination:** An update will be executed if there is an old work having the same id. Otherwise a new user will be added.
     
     **Return:** `true` if an insert is executed, `false` for an update.
     """
     upsertWork(creator: String!, keyPhoto: URL!, title: String!, description: String!, belongingRepo: UUID): Boolean
+
+    """
+    **Function:** Update or insert a repository.
+
+    **Explaination:** An update will be executed if there is an old repository having the same id. Otherwise a new user will be added.
+    
+    **Return:** `true` if an insert is executed, `false` for an update.
+    """
+    upsertRepo(starter: String!, title: String!, description: String!, belongingRepo: UUID): Boolean
 }

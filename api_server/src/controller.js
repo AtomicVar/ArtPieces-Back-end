@@ -65,4 +65,13 @@ const upsertWork = async (obj, args) => {
     });
 };
 
-export { getUser, getWork, getRepo, getLecture, upsertUser, upsertWork };
+const upsertRepo = async (obj, args) => {
+    return await model.Repo.upsert({
+        id: args.id ? args.id : uuidv4(),
+        title: args.title,
+        root: args.root,
+        user: args.starter,
+    });
+};
+
+export { getUser, getWork, getRepo, getLecture, upsertUser, upsertWork, upsertRepo };
