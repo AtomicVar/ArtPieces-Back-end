@@ -5,6 +5,8 @@ const sequelize = new Sequelize('art', 'art', 'art', {
     dialect: 'mysql',
     define: {
         timestamps: false,
+        charset: 'utf8',
+        collate: 'utf8_general_ci'
     },
 });
 
