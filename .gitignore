@@ -3,5 +3,4 @@ dist/
 upload_server/files/
 .vscode/
 *.txt
-*.html
 *.png
