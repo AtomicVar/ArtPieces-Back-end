@@ -1,6 +1,9 @@
 const formidable = require('formidable');
 const http = require('http');
+const path = require('path');
 const fs = require('fs');
+
+const APIURL = 'http://95.179.143.156:4001/';
 
 const uploadServer = http.createServer((req, res) => {
     // Upload a file
@@ -11,7 +14,7 @@ const uploadServer = http.createServer((req, res) => {
         form.on('file', (name, file) => {
             if (file.type == 'image/png') {
                 msg.msg = `${name} uploaded`;
-                msg.url = file.path;
+                msg.url = APIURL + path.relative(__dirname, file.path);
                 console.log(`File ${file.name} saved to ${file.path}.`);
             } else {
                 msg.error = 'PNG wanted!';
@@ -34,14 +37,14 @@ const uploadServer = http.createServer((req, res) => {
             res.end(JSON.stringify(msg));
         });
 
-        form.uploadDir = './files';
+        form.uploadDir = path.join(__dirname, 'files');
         form.keepExtensions = true;
         form.parse(req);
     }
     
     // Download a file
     else if (req.url.indexOf('/files') == 0 && req.method == 'GET') {
-        let filePath = req.url.slice(1);
+        let filePath = path.join(__dirname, req.url.slice(1));
         fs.stat(filePath, (err, stat) => {
             if (err) {
                 if ('ENOENT' == err.code) {
