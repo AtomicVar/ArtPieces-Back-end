@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const uploadServer = http.createServer((req, res) => {
     // Upload a file
-    if (req.url == '/upload' && req.method.toLowerCase() == 'post') {
+    if (req.url == '/upload' && req.method == 'POST') {
         let form = new formidable.IncomingForm();
         let msg = {};
 
@@ -40,7 +40,7 @@ const uploadServer = http.createServer((req, res) => {
     }
     
     // Download a file
-    else if (req.url.indexOf('/files') == 0 && req.method.toLowerCase() == 'get') {
+    else if (req.url.indexOf('/files') == 0 && req.method == 'GET') {
         let filePath = req.url.slice(1);
         fs.stat(filePath, (err, stat) => {
             if (err) {
