@@ -1,5 +1,5 @@
 import * as model from './model';
-import { uuidv4 } from 'uuid/v4';
+import uuidv4 from 'uuid/v4';
 import 'babel-polyfill';
 
 const getWork = async (obj, args) => {
@@ -60,8 +60,9 @@ const upsertWork = async (obj, args) => {
         id: args.id ? args.id : uuidv4(),
         title: args.title,
         description: args.description,
+        pictureURL: args.keyPhoto,
         user: args.creator,
-        timestamp: new Date(),
+        timestamp: args.timestamp ? new Date(args.timestamp) : null,
     });
 };
 

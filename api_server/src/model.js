@@ -29,7 +29,7 @@ const Artwork = sequelize.define('artwork', {
     description: TEXT,
     user: STRING,
     timestamp: DATE,
-    picture: STRING,
+    pictureURL: STRING,
 });
 
 const Repo = sequelize.define('repo', {

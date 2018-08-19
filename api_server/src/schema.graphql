@@ -103,7 +103,8 @@ type Mutation {
     
     **Return:** `true` if an insert is executed, `false` for an update.
     """
-    upsertWork(creator: String!, keyPhoto: URL!, title: String!, description: String!, belongingRepo: UUID): Boolean
+    upsertWork(id: UUID, creator: String, keyPhoto: URL, title: String,
+        description: String, timestamp: Int, belongingRepo: UUID): Boolean
 
     """
     **Function:** Update or insert a repository.
