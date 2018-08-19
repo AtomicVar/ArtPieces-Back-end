@@ -1,4 +1,4 @@
-import Sequelize, { UUID, STRING, TEXT, DATE, BLOB, JSON } from 'sequelize';
+import Sequelize, { UUID, STRING, TEXT, DATE, JSON } from 'sequelize';
 
 const sequelize = new Sequelize('art', 'art', 'art', {
     host: 'localhost',
@@ -17,7 +17,7 @@ const User = sequelize.define('user', {
     },
     name: STRING,
     password: STRING,
-    portrait: BLOB,
+    portrait: STRING,
 });
 
 const Artwork = sequelize.define('artwork', {
@@ -29,7 +29,7 @@ const Artwork = sequelize.define('artwork', {
     description: TEXT,
     user: STRING,
     timestamp: DATE,
-    picture: BLOB,
+    picture: STRING,
 });
 
 const Repo = sequelize.define('repo', {
