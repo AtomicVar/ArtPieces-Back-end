@@ -3,12 +3,6 @@ scalar JSON
 scalar UUID
 scalar URL
 
-type File {
-    filename: String!
-    mimetype: String!
-    encoding: String!
-}
-
 type User {
     email: String
     name: String
