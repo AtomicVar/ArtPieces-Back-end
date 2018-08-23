@@ -46,33 +46,111 @@ const getLecture = async (obj, args) => {
     return lect;
 };
 
-const upsertUser = async (obj, args) => {
-    return await model.User.upsert({
+const updateUser = async (obj, args) => {
+    let [n] = await model.User.update(
+        {
+            email: args.email,
+            name: args.name,
+            password: args.password,
+            portrait: args.portrait,
+        }, {
+            where: {
+                email: args.email
+            }
+        }
+    );
+    return n == 1;
+};
+
+const insertUser = async (obj, args) => {
+    let user = await model.User.create({
         email: args.email,
         name: args.name,
         password: args.password,
         portrait: args.portrait,
     });
+    return user.email;
 };
 
-const upsertWork = async (obj, args) => {
-    return await model.Artwork.upsert({
-        id: args.id ? args.id : uuidv4(),
+const updateWork = async (obj, args) => {
+    let [n] = await model.Artwork.update(
+        {
+            title: args.title,
+            description: args.description,
+            pictureURL: args.keyPhoto,
+            user: args.creator,
+        },
+        {
+            where: {
+                id: args.id
+            }
+        }
+    );
+    return n == 1;
+};
+
+const insertWork = async (obj, args) => {
+    let work = await model.Artwork.create({
+        id: uuidv4(),
         title: args.title,
         description: args.description,
         pictureURL: args.keyPhoto,
         user: args.creator,
-        timestamp: args.timestamp ? new Date(args.timestamp) : null,
     });
+    return work.id;
 };
 
-const upsertRepo = async (obj, args) => {
-    return await model.Repo.upsert({
-        id: args.id ? args.id : uuidv4(),
+const updateRepo = async (obj, args) => {
+    let [n] = await model.Repo.update(
+        {
+            id: args.id,
+            title: args.title,
+            root: args.root,
+            user: args.starter,
+        },
+        {
+            where: {
+                id: args.id,
+            },
+        }
+    );
+    return n == 1;
+};
+
+const insertRepo = async (obj, args) => {
+    let repo = await model.Repo.create({
+        id: uuidv4(),
         title: args.title,
         root: args.root,
         user: args.starter,
     });
+    return repo.id;
 };
 
-export { getUser, getWork, getRepo, getLecture, upsertUser, upsertWork, upsertRepo };
+const updateLect = async (obj, args) => {
+    let [n] = await model.Lecture.update({
+        id: args.id,
+        title: args.title,
+        description: args.description,
+        steps: args.steps,
+    });
+    return n == 1;
+};
+
+const insertLect = async (obj, args) => {
+    let lect = await model.Lecture.create({
+        id: uuidv4(),
+        title: args.title,
+        description: args.description,
+        steps: args.steps,
+        timestamp: new Date(args.timestamp),
+        user: args.creator,
+    });
+    return lect.id;
+};
+
+export {
+    getUser, getWork, getRepo, getLecture,
+    updateUser, insertUser, updateWork, insertWork, updateRepo, insertRepo,
+    updateLect, insertLect
+};

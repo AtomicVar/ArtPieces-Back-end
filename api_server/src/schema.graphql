@@ -1,3 +1,6 @@
+"""
+`Datetime` is the milliseconds since Jan. 1, 1970.
+"""
 scalar Datetime
 scalar JSON
 scalar UUID
@@ -82,30 +85,97 @@ type Query {
 
 type Mutation {
     """
-    **Function:** Update or insert an user.
-
-    **Explaination:** An update will be executed if there is an old user having the same email. Otherwise a new user will be added.
+    **Function:** Update an user.
     
-    **Return:** `true` if an insert is executed, `false` for an update.
+    **Return:** `true` -> succussfully updated. `false` -> the user doesn't exist.
     """
-    upsertUser(email: String!, name: String!, password: String!, portrait: URL): Boolean
+    updateUser(
+        email: String!,
+        name: String,
+        password: String,
+        portrait: URL
+    ): Boolean
 
     """
-    **Function:** Update or insert a work.
-
-    **Explaination:** An update will be executed if there is an old work having the same id. Otherwise a new user will be added.
+    **Function:** Insert a new user, that is, sign up a new user.
     
-    **Return:** `true` if an insert is executed, `false` for an update.
+    **Return:** The `email` of the new user.
     """
-    upsertWork(id: UUID, creator: String, keyPhoto: URL, title: String,
-        description: String, timestamp: Int, belongingRepo: UUID): Boolean
+    insertUser(
+        email: String!,
+        name: String!,
+        password: String!,
+        portrait: URL
+    ): String
 
     """
-    **Function:** Update or insert a repository.
+    **Function:** Update a work.
 
-    **Explaination:** An update will be executed if there is an old repository having the same id. Otherwise a new user will be added.
-    
-    **Return:** `true` if an insert is executed, `false` for an update.
+    **Return:** `true` -> successfully updated. `false` -> the work doesn't exist.
     """
-    upsertRepo(starter: String!, title: String!, description: String!, belongingRepo: UUID): Boolean
+    updateWork(
+        id: UUID!,
+        keyPhoto: URL,
+        title: String,
+        description: String,
+        belongingRepo: UUID
+    ): Boolean
+
+    """
+    **Function:** Insert a new work.
+
+    **Return:** The UUID of the new work.
+    """
+    insertWork(
+        creator: String!,
+        title: String!,
+        description: String,
+        belongingRepo: UUID
+    ): String
+
+    """
+    **Function:** Update a repository.
+
+    **Return:** `true` -> successfully updated. `false` -> the repository doesn't exist.
+    """
+    updateRepo(
+        id: UUID!,
+        title: String,
+        description: String
+    ): Boolean
+
+    """
+    **Function:** Insert a new repository.
+
+    **Return:** The UUID of the new repository.
+    """
+    insertRepo(
+        title: String!,
+        description: String,
+        keyArtwork: UUID!
+        starter: String!
+    ): String
+
+    """
+    **Function:** Update a lecture.
+
+    **Return:** `true` -> successfully updated. `false` -> the lecture doesn't exist.
+    """
+    updateLect(
+        id: UUID!,
+        title: String,
+        description: String
+    ): Boolean
+
+    """
+    **Function:** Insert a new lecture.
+
+    **Return:** `true` -> successfully inserted. `false` -> failure.
+    """
+    insertLect(
+        title: String!,
+        description: String,
+        keyArtwork: UUID!
+        creator: String!
+    ): String
 }
