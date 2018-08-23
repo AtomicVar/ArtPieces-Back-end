@@ -4,7 +4,14 @@ import 'babel-polyfill';
 
 const getWork = async (obj, args) => {
     let work = await model.Artwork.findOne({
-        attributes: ['id', 'title', 'description', 'user', 'timestamp', 'picture'],
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'user',
+            'timestamp',
+            'picture',
+        ],
         where: { id: args.id },
     });
     return work;
@@ -16,12 +23,19 @@ const getUser = async (obj, args) => {
         where: { email: args.email },
     });
     user.artworks = await model.Artwork.findAll({
-        attributes: ['id', 'title', 'description', 'user', 'timestamp', 'picture'],
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'user',
+            'timestamp',
+            'picture',
+        ],
         where: { user: args.email },
     });
     user.repos = await model.Repo.findAll({
         attributes: ['id', 'title', 'root', 'title', 'user', 'timestamp'],
-        where: { user: args.email }
+        where: { user: args.email },
     });
     return user;
 };
@@ -36,7 +50,15 @@ const getRepo = async (obj, args) => {
 
 const getLecture = async (obj, args) => {
     let lect = await model.Lecture.findOne({
-        attributes: ['id', 'artwork', 'title', 'description', 'steps', 'user', 'timestamp'],
+        attributes: [
+            'id',
+            'artwork',
+            'title',
+            'description',
+            'steps',
+            'user',
+            'timestamp',
+        ],
         where: { id: args.id },
     });
     lect.numberOfSteps = lect.steps.length;
@@ -53,10 +75,11 @@ const updateUser = async (obj, args) => {
             name: args.name,
             password: args.password,
             portrait: args.portrait,
-        }, {
+        },
+        {
             where: {
-                email: args.email
-            }
+                email: args.email,
+            },
         }
     );
     return n == 1;
@@ -82,8 +105,8 @@ const updateWork = async (obj, args) => {
         },
         {
             where: {
-                id: args.id
-            }
+                id: args.id,
+            },
         }
     );
     return n == 1;
@@ -150,7 +173,16 @@ const insertLect = async (obj, args) => {
 };
 
 export {
-    getUser, getWork, getRepo, getLecture,
-    updateUser, insertUser, updateWork, insertWork, updateRepo, insertRepo,
-    updateLect, insertLect
+    getUser,
+    getWork,
+    getRepo,
+    getLecture,
+    updateUser,
+    insertUser,
+    updateWork,
+    insertWork,
+    updateRepo,
+    insertRepo,
+    updateLect,
+    insertLect,
 };

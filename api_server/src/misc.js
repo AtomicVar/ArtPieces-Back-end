@@ -11,7 +11,12 @@ const showPrompt = () => {
 
     if (process.argv[2] == 'dev') {
         let szAns = question(
-            'Are you sure to switch to' + ' DEV '.red + 'mode? It will' + ' erase '.red + 'the database!(y/n)');
+            'Are you sure to switch to' +
+                ' DEV '.red +
+                'mode? It will' +
+                ' erase '.red +
+                'the database!(y/n)'
+        );
         if (szAns == 'y') {
             process.env.NODE_ENV = 'dev';
             console.log('Development Mode'.red + '. Be care.');

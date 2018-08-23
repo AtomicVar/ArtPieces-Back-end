@@ -22,7 +22,7 @@ const uploadServer = http.createServer((req, res) => {
             }
         });
 
-        form.on('error', (err) => {
+        form.on('error', err => {
             msg.error = 'Internal Server Error';
             throw err;
         });
@@ -41,7 +41,7 @@ const uploadServer = http.createServer((req, res) => {
         form.keepExtensions = true;
         form.parse(req);
     }
-    
+
     // Download a file
     else if (req.url.indexOf('/files') == 0 && req.method == 'GET') {
         let filePath = path.join(__dirname, req.url.slice(1));
@@ -65,7 +65,7 @@ const uploadServer = http.createServer((req, res) => {
             }
         });
     }
-    
+
     // Malformed URL
     else {
         res.statusCode = 400;
@@ -73,6 +73,6 @@ const uploadServer = http.createServer((req, res) => {
     }
 });
 
-uploadServer.listen(4001, '0.0.0.0',  'localhost', () => {
+uploadServer.listen(4001, '0.0.0.0', 'localhost', () => {
     console.log('Upload server started...');
 });

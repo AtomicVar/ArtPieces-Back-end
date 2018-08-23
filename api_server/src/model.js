@@ -6,14 +6,14 @@ const sequelize = new Sequelize('art', 'art', 'art', {
     define: {
         timestamps: false,
         charset: 'utf8',
-        collate: 'utf8_general_ci'
+        collate: 'utf8_general_ci',
     },
 });
 
 const User = sequelize.define('user', {
     email: {
         type: STRING,
-        primaryKey: true
+        primaryKey: true,
     },
     name: STRING,
     password: STRING,
@@ -72,6 +72,12 @@ const Repo_Childwork = sequelize.define('repo_childwork', {
 });
 
 export {
-    sequelize, User, Artwork, Lecture, Repo, Fllw_Relation, Star_Relation,
-    Repo_Childwork
+    sequelize,
+    User,
+    Artwork,
+    Lecture,
+    Repo,
+    Fllw_Relation,
+    Star_Relation,
+    Repo_Childwork,
 };
