@@ -1,6 +1,6 @@
 import 'colors';
 import { question } from 'readline-sync';
-import { sequelize } from './model';
+import { database } from './model';
 
 const showPrompt = () => {
     /* showPrompt: Ask the user to choose from Dev Mode and Production Mode
@@ -30,9 +30,9 @@ const showPrompt = () => {
     }
 
     if (process.env.NODE_ENV == 'dev') {
-        sequelize.sync({ force: true });
+        database.sync({ force: true });
     } else {
-        sequelize.sync();
+        database.sync();
     }
 };
 

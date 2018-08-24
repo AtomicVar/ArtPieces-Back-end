@@ -1,6 +1,6 @@
 import Sequelize, { UUID, STRING, TEXT, DATE, JSON } from 'sequelize';
 
-const sequelize = new Sequelize('art', 'art', 'art', {
+const database = new Sequelize('art', 'art', 'art', {
     host: 'localhost',
     dialect: 'mysql',
     define: {
@@ -10,7 +10,7 @@ const sequelize = new Sequelize('art', 'art', 'art', {
     },
 });
 
-const User = sequelize.define('user', {
+const User = database.define('user', {
     email: {
         type: STRING,
         primaryKey: true,
@@ -20,7 +20,7 @@ const User = sequelize.define('user', {
     portrait: STRING,
 });
 
-const Artwork = sequelize.define('artwork', {
+const Artwork = database.define('artwork', {
     id: {
         type: UUID,
         primaryKey: true,
@@ -32,7 +32,7 @@ const Artwork = sequelize.define('artwork', {
     pictureURL: STRING,
 });
 
-const Repo = sequelize.define('repo', {
+const Repo = database.define('repo', {
     id: {
         type: UUID,
         primaryKey: true,
@@ -43,7 +43,7 @@ const Repo = sequelize.define('repo', {
     timestamp: DATE,
 });
 
-const Lecture = sequelize.define('lecture', {
+const Lecture = database.define('lecture', {
     id: {
         type: UUID,
         primaryKey: true,
@@ -56,23 +56,23 @@ const Lecture = sequelize.define('lecture', {
     timestamp: DATE,
 });
 
-const Fllw_Relation = sequelize.define('fllw_relation', {
+const Fllw_Relation = database.define('fllw_relation', {
     user: STRING,
     follow: STRING,
 });
 
-const Star_Relation = sequelize.define('star_relation', {
+const Star_Relation = database.define('star_relation', {
     user: STRING,
     lecture: UUID,
 });
 
-const Repo_Childwork = sequelize.define('repo_childwork', {
+const Repo_Childwork = database.define('repo_childwork', {
     repo: UUID,
     artwork: UUID,
 });
 
 export {
-    sequelize,
+    database,
     User,
     Artwork,
     Lecture,
