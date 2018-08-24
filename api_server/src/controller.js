@@ -71,7 +71,6 @@ const getLecture = async (obj, args) => {
 const updateUser = async (obj, args) => {
     let [n] = await model.User.update(
         {
-            email: args.email,
             name: args.name,
             password: args.password,
             portrait: args.portrait,
@@ -120,16 +119,18 @@ const insertWork = async (obj, args) => {
         pictureURL: args.keyPhoto,
         user: args.creator,
     });
+    await model.Repo_Childwork.create({
+        repo: args.belongingRepo,
+        artwork: work.id,
+    });
     return work.id;
 };
 
 const updateRepo = async (obj, args) => {
     let [n] = await model.Repo.update(
         {
-            id: args.id,
             title: args.title,
-            root: args.root,
-            user: args.starter,
+            description: args.description,
         },
         {
             where: {
@@ -144,19 +145,25 @@ const insertRepo = async (obj, args) => {
     let repo = await model.Repo.create({
         id: uuidv4(),
         title: args.title,
-        root: args.root,
+        keyArtwork: args.keyArtwork,
         user: args.starter,
     });
     return repo.id;
 };
 
 const updateLect = async (obj, args) => {
-    let [n] = await model.Lecture.update({
-        id: args.id,
-        title: args.title,
-        description: args.description,
-        steps: args.steps,
-    });
+    let [n] = await model.Lecture.update(
+        {
+            title: args.title,
+            description: args.description,
+            steps: args.steps,
+        },
+        {
+            where: {
+                id: args.id,
+            },
+        }
+    );
     return n == 1;
 };
 
@@ -167,7 +174,7 @@ const insertLect = async (obj, args) => {
         description: args.description,
         steps: args.steps,
         timestamp: new Date(args.timestamp),
-        user: args.creator,
+        creator: args.creator,
     });
     return lect.id;
 };
