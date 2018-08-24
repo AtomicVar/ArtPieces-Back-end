@@ -175,4 +175,24 @@ type Mutation {
         steps: JSON
         creator: String!
     ): UUID
+
+    """
+    **Function:** Follow an user. (`origin` follows `target`)
+
+    **Return:** The new number of followers of `target`.
+    """
+    follow(
+        origin: String!
+        target: String!
+    ): Int
+
+    """
+    **Function:** Unfollow an user. (`origin` unfollows `target`)
+
+    **Return:** The new number of followers of `target`.
+    """
+    unfollow(
+        origin: String!
+        target: String!
+    ): Int
 }

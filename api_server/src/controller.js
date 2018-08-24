@@ -178,6 +178,34 @@ const insertLect = async (obj, args) => {
     return lect.id;
 };
 
+const follow = async (obj, args) => {
+    await model.Fllw_Relation.create({
+        user: args.origin,
+        follow: args.target,
+    });
+    let count = model.Fllw_Relation.count({
+        where: {
+            follow: args.target,
+        },
+    });
+    return count;
+};
+
+const unfollow = async (obj, args) => {
+    await model.Fllw_Relation.destroy({
+        where: {
+            user: args.origin,
+            follow: args.target,
+        },
+    });
+    let count = model.Fllw_Relation.count({
+        where: {
+            follow: args.target,
+        },
+    });
+    return count;
+};
+
 export {
     getUser,
     getWork,
@@ -191,4 +219,6 @@ export {
     insertRepo,
     updateLect,
     insertLect,
+    follow,
+    unfollow,
 };
