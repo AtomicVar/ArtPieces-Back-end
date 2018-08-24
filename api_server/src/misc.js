@@ -1,8 +1,8 @@
 import 'colors';
 import { question } from 'readline-sync';
-import { sequelize } from './model';
+import { database } from './model';
 
-const showPrompt = () => {
+const safeLaunch = () => {
     /* showPrompt: Ask the user to choose from Dev Mode and Production Mode
      *
      * Dev Mode: The structure of the database will be rebuilt
@@ -10,14 +10,14 @@ const showPrompt = () => {
      */
 
     if (process.argv[2] == 'dev') {
-        let szAns = question(
+        let answer = question(
             'Are you sure to switch to' +
                 ' DEV '.red +
                 'mode? It will' +
                 ' erase '.red +
                 'the database!(y/n)'
         );
-        if (szAns == 'y') {
+        if (answer == 'y') {
             process.env.NODE_ENV = 'dev';
             console.log('Development Mode'.red + '. Be care.');
         } else {
@@ -30,10 +30,10 @@ const showPrompt = () => {
     }
 
     if (process.env.NODE_ENV == 'dev') {
-        sequelize.sync({ force: true });
+        database.sync({ force: true });
     } else {
-        sequelize.sync();
+        database.sync();
     }
 };
 
-export { showPrompt };
+export { safeLaunch };
