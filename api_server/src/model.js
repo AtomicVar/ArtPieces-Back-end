@@ -38,7 +38,8 @@ const Repo = database.define('repo', {
         primaryKey: true,
     },
     title: STRING,
-    root: UUID,
+    description: STRING,
+    keyArtwork: UUID,
     user: STRING,
     timestamp: DATE,
 });
@@ -48,11 +49,10 @@ const Lecture = database.define('lecture', {
         type: UUID,
         primaryKey: true,
     },
-    artwork: UUID,
     title: STRING,
     description: STRING,
     steps: JSON,
-    user: STRING,
+    creator: STRING,
     timestamp: DATE,
 });
 
