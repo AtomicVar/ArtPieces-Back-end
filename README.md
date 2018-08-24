@@ -1,4 +1,4 @@
-# Artpieces
+# Artpieces-Backend/GraphQL
 
 计算机和画画有许多共同之处。事实上，在我所知道的所有行业中，黑客与画家最像。
 
@@ -24,3 +24,7 @@ Artpieces Backend
         |-- app.js              // Main program.
         `-- index.html          // A web page for test use.
 ```
+
+## RESTful porting
+
+I'm also developing a RESTful edition of this server. Checkout to branch [restful](https://github.com/ZJUGuoShuai/ArtPieces-Back-end/tree/restful).
