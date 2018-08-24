@@ -206,6 +206,34 @@ const unfollow = async (obj, args) => {
     return count;
 };
 
+const star = async (obj, args) => {
+    await model.Star_Relation.create({
+        user: args.user,
+        lecture: args.lecture,
+    });
+    let count = model.Star_Relation.count({
+        where: {
+            lecture: args.lecture,
+        },
+    });
+    return count;
+};
+
+const unstar = async (obj, args) => {
+    await model.Star_Relation.destroy({
+        where: {
+            user: args.user,
+            lecture: args.lecture,
+        },
+    });
+    let count = model.Star_Relation.count({
+        where: {
+            lecture: args.lecture,
+        },
+    });
+    return count;
+};
+
 export {
     getUser,
     getWork,
@@ -221,4 +249,6 @@ export {
     insertLect,
     follow,
     unfollow,
+    star,
+    unstar,   
 };

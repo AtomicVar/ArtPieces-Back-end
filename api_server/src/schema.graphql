@@ -195,4 +195,24 @@ type Mutation {
         origin: String!
         target: String!
     ): Int
+
+    """
+    **Function:** Star a lecture.
+
+    **Return:** The new number of stars of the lecture.
+    """
+    star(
+        user: String!
+        lecture: UUID!
+    ): Int
+
+    """
+    **Function:** Unstar a lecture.
+
+    **Return:** The new number of stars of the lecture.
+    """
+    unstar(
+        user: String!
+        lecture: UUID!
+    ): Int
 }
