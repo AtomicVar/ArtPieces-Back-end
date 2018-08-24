@@ -1,4 +1,4 @@
-# Artpieces
+# Artpieces-Backend/RESTful
 
 计算机和画画有许多共同之处。事实上，在我所知道的所有行业中，黑客与画家最像。
 
@@ -13,11 +13,9 @@ Artpieces Backend
     |-- api_server/             // Provides common API service.
     |   |-- src/                // Source code
     |   |   |-- app.js          // Entry of the server.
-    |   |   |-- controller.js   // API routines.
     |   |   |-- misc.js         // An utility module to help launch the server
     |   |   |                   //+safely.
-    |   |   |-- model.js        // Database models (data structures).
-    |   |   `-- schema.graphql  // GraphQL schema.
+    |   |   `-- model.js        // Database models (data structures).
     |   `-- dist/               // Compiled code. Not in this repo.
     |
     `-- upload_server/          // Provides images upload service.
