@@ -50,7 +50,7 @@ type Query {
     **Function:** Get the information of an artwork.
 
     **Explaination:** `UUID` is a string.
-    
+
     **Return:** an `Artwork`.
     """
     getWork(id: UUID!): Artwork
@@ -59,16 +59,16 @@ type Query {
     **Function:** Get the information of an user.
 
     **Explaination:** None.
-    
+
     **Return:** an `User`.
     """
     getUser(email: String!): User
-    
+
     """
     **Function:** Get the information of a repository.
 
     **Explaination:** `UUID` is a string.
-    
+
     **Return:** an `Repo`.
     """
     getRepo(id: UUID!): Repo
@@ -77,7 +77,7 @@ type Query {
     **Function:** Get the information of a lecture.
 
     **Explaination:** `UUID` is a string.
-    
+
     **Return:** an `Lecture`.
     """
     getLecture(id: UUID!): Lecture
@@ -85,39 +85,39 @@ type Query {
 
 type Mutation {
     """
-    **Function:** Update an user.
-    
+    **Function:** Update an user (`name`, `password`, `protrait`).
+
     **Return:** `true` -> succussfully updated. `false` -> the user doesn't exist.
     """
     updateUser(
-        email: String!,
-        name: String,
-        password: String,
+        email: String!
+        name: String
+        password: String
         portrait: URL
     ): Boolean
 
     """
     **Function:** Insert a new user, that is, sign up a new user.
-    
+
     **Return:** The `email` of the new user.
     """
     insertUser(
-        email: String!,
-        name: String!,
-        password: String!,
+        email: String!
+        name: String!
+        password: String!
         portrait: URL
-    ): String
+    ): UUID
 
     """
-    **Function:** Update a work.
+    **Function:** Update a work (`title`, `description`, `keyPhoto`, `creator`).
 
     **Return:** `true` -> successfully updated. `false` -> the work doesn't exist.
     """
     updateWork(
-        id: UUID!,
-        keyPhoto: URL,
-        title: String,
-        description: String,
+        id: UUID!
+        keyPhoto: URL
+        title: String
+        description: String
         belongingRepo: UUID
     ): Boolean
 
@@ -127,22 +127,19 @@ type Mutation {
     **Return:** The UUID of the new work.
     """
     insertWork(
-        creator: String!,
-        title: String!,
-        description: String,
+        creator: String!
+        title: String!
+        description: String
+        keyPhoto: URL!
         belongingRepo: UUID
-    ): String
+    ): UUID
 
     """
-    **Function:** Update a repository.
+    **Function:** Update a repository (`title`, `description`).
 
     **Return:** `true` -> successfully updated. `false` -> the repository doesn't exist.
     """
-    updateRepo(
-        id: UUID!,
-        title: String,
-        description: String
-    ): Boolean
+    updateRepo(id: UUID!, title: String, description: String): Boolean
 
     """
     **Function:** Insert a new repository.
@@ -150,21 +147,22 @@ type Mutation {
     **Return:** The UUID of the new repository.
     """
     insertRepo(
-        title: String!,
-        description: String,
+        title: String!
+        description: String
         keyArtwork: UUID!
         starter: String!
-    ): String
+    ): UUID
 
     """
-    **Function:** Update a lecture.
+    **Function:** Update a lecture (`title`, `description`, `steps`).
 
     **Return:** `true` -> successfully updated. `false` -> the lecture doesn't exist.
     """
     updateLect(
-        id: UUID!,
-        title: String,
+        id: UUID!
+        title: String
         description: String
+        steps: JSON
     ): Boolean
 
     """
@@ -173,9 +171,9 @@ type Mutation {
     **Return:** `true` -> successfully inserted. `false` -> failure.
     """
     insertLect(
-        title: String!,
-        description: String,
-        keyArtwork: UUID!
+        title: String!
+        description: String
+        steps: JSON
         creator: String!
-    ): String
+    ): UUID
 }
