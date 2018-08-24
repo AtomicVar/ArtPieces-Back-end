@@ -6,7 +6,7 @@ const showPrompt = () => {
     /* showPrompt: Ask the user to choose from Dev Mode and Production Mode
      *
      * Dev Mode: The structure of the database will be rebuilt
-     * Production Mode: The date in database will not be erased
+     * Production Mode: The data in database will not be erased
      */
 
     if (process.argv[2] == 'dev') {
