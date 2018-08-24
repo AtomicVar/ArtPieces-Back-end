@@ -1,35 +1,31 @@
-import { ApolloServer } from 'apollo-server';
-import schema from './schema.graphql';
-import * as controller from './controller';
-import { showPrompt } from './misc';
+import { database, Artwork, User } from './model';
+import finale from 'finale-rest';
+import { safeLaunch } from './misc';
+import restify from 'restify';
 
-/* Show prompt before starting the server. */
-showPrompt();
+const app = restify.createServer();
 
-const typeDefs = schema;
+app.use(restify.plugins.queryParser());
+app.use(restify.plugins.bodyParser());
 
-const resolvers = {
-    Query: {
-        getWork: controller.getWork,
-        getUser: controller.getUser,
-        getRepo: controller.getRepo,
-        getLecture: controller.getLecture,
-    },
+/* Launch the server safely. */
+safeLaunch();
 
-    Mutation: {
-        updateUser: controller.updateUser,
-        insertUser: controller.insertUser,
-        updateWork: controller.updateWork,
-        insertWork: controller.insertWork,
-        updateRepo: controller.updateRepo,
-        insertRepo: controller.insertRepo,
-        updateLect: controller.updateLect,
-        insertLect: controller.insertLect,
-    },
-};
+finale.initialize({
+    app: app,
+    sequelize: database,
+});
 
-const server = new ApolloServer({ typeDefs, resolvers });
+finale.resource({
+    model: User,
+    endpoints: ['/users', '/users/:email'],
+});
 
-server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
+finale.resource({
+    model: Artwork,
+    endpoints: ['/artworks', '/artworks/:id'],
+});
+
+app.listen(3000, () => {
+    console.log('OK');
 });
