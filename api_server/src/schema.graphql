@@ -28,14 +28,13 @@ type Repo {
     id: UUID
     keyArtwork: Artwork
     title: String
-    Starter: User
+    starter: User
     timestamp: Datetime
     artworks: [Artwork]
 }
 
 type Lecture {
     id: UUID
-    artwork: Artwork
     title: String
     description: String
     timestamp: Datetime

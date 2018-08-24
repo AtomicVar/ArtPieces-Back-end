@@ -27,7 +27,7 @@ const Artwork = database.define('artwork', {
     },
     title: STRING,
     description: TEXT,
-    user: STRING,
+    creator: STRING,
     timestamp: DATE,
     pictureURL: STRING,
 });
@@ -40,7 +40,7 @@ const Repo = database.define('repo', {
     title: STRING,
     description: STRING,
     keyArtwork: UUID,
-    user: STRING,
+    starter: STRING,
     timestamp: DATE,
 });
 

@@ -8,9 +8,9 @@ const getWork = async (obj, args) => {
             'id',
             'title',
             'description',
-            'user',
+            'creator',
             'timestamp',
-            'picture',
+            ['pictureURL', 'keyPhoto'],
         ],
         where: { id: args.id },
     });
@@ -27,14 +27,14 @@ const getUser = async (obj, args) => {
             'id',
             'title',
             'description',
-            'user',
+            'creator',
             'timestamp',
-            'picture',
+            ['pictureURL', 'keyPhoto'],
         ],
         where: { user: args.email },
     });
     user.repos = await model.Repo.findAll({
-        attributes: ['id', 'title', 'root', 'title', 'user', 'timestamp'],
+        attributes: ['id', 'title', 'keyArtwork', 'starter', 'timestamp'],
         where: { user: args.email },
     });
     return user;
@@ -42,7 +42,7 @@ const getUser = async (obj, args) => {
 
 const getRepo = async (obj, args) => {
     let repo = await model.Repo.findOne({
-        attributes: ['id', 'title', 'root', 'title', 'user', 'timestamp'],
+        attributes: ['id', 'title', 'keyArtwork', 'starter', 'timestamp'],
         where: { id: args.id },
     });
     return repo;
@@ -52,11 +52,10 @@ const getLecture = async (obj, args) => {
     let lect = await model.Lecture.findOne({
         attributes: [
             'id',
-            'artwork',
             'title',
             'description',
             'steps',
-            'user',
+            'creator',
             'timestamp',
         ],
         where: { id: args.id },
