@@ -5,6 +5,12 @@ scalar Datetime
 scalar JSON
 scalar UUID
 scalar URL
+scalar Email
+"""
+`Msg` is a message JSON object that has two properties: `status` and `payload`.
+For each API the `Msg` object is different and you can refer to each API's document.
+"""
+scalar Msg
 
 type User {
     email: String
@@ -104,11 +110,12 @@ type Mutation {
     """
     insertWork(
         creator: String!
+        password: String!
         title: String!
         description: String
         keyPhoto: URL!
         belongingRepo: UUID
-    ): UUID
+    ): Msg
 
     """
     **Function:** Insert a new repository.
@@ -120,7 +127,8 @@ type Mutation {
         description: String
         keyArtwork: UUID!
         starter: String!
-    ): UUID
+        password: String!
+    ): Msg
 
     """
     **Function:** Insert a new lecture.
@@ -132,7 +140,8 @@ type Mutation {
         description: String
         steps: JSON
         creator: String!
-    ): UUID
+        password: String!
+    ): Msg
 
     """
     **Function:** Remove a work.
@@ -141,7 +150,9 @@ type Mutation {
     """
     removeWork(
         id: UUID!
-    ): Boolean
+        creator: Email!
+        password: String!
+    ): Msg
 
     """
     **Function:** Remove a repository.
@@ -150,7 +161,9 @@ type Mutation {
     """
     removeRepo(
         id: UUID!
-    ): Boolean
+        starter: Email!
+        password: String!
+    ): Msg
 
     """
     **Function:** Remove a lecture.
@@ -159,7 +172,9 @@ type Mutation {
     """
     removeLect(
         id: UUID!
-    ): Boolean
+        creator: Email!
+        password: String!
+    ): Msg
 
     """
     **Function:** Update an user (`name`, `password`, `protrait`).
@@ -168,10 +183,11 @@ type Mutation {
     """
     updateUser(
         email: String!
+        password: String!
         name: String
-        password: String
+        newPassword: String
         portrait: URL
-    ): Boolean
+    ): Msg
 
     """
     **Function:** Update a work (`title`, `description`, `keyPhoto`, `creator`).
@@ -180,11 +196,12 @@ type Mutation {
     """
     updateWork(
         id: UUID!
+        creator: Email!
+        password: String!
         keyPhoto: URL
         title: String
         description: String
-        belongingRepo: UUID
-    ): Boolean
+    ): Msg
 
     """
     **Function:** Update a repository (`title`, `description`).
@@ -193,9 +210,11 @@ type Mutation {
     """
     updateRepo(
         id: UUID!
+        starter: String!
+        password: String!
         title: String,
         description: String
-    ): Boolean
+    ): Msg
 
     """
     **Function:** Update a lecture (`title`, `description`, `steps`).
@@ -204,10 +223,12 @@ type Mutation {
     """
     updateLect(
         id: UUID!
+        creator: String!
+        password: String!
         title: String
         description: String
         steps: JSON
-    ): Boolean
+    ): Msg
 
     """
     **Function:** Follow an user. (`origin` follows `target`)
@@ -216,8 +237,9 @@ type Mutation {
     """
     follow(
         origin: String!
+        password: String!
         target: String!
-    ): Int
+    ): Msg
 
     """
     **Function:** Star a lecture.
@@ -226,8 +248,9 @@ type Mutation {
     """
     star(
         user: String!
+        password: String!
         lecture: UUID!
-    ): Int
+    ): Msg
 
     """
     **Function:** Unfollow an user. (`origin` unfollows `target`)
@@ -236,8 +259,9 @@ type Mutation {
     """
     unfollow(
         origin: String!
+        password: String!
         target: String!
-    ): Int
+    ): Msg
 
     """
     **Function:** Unstar a lecture.
@@ -246,6 +270,7 @@ type Mutation {
     """
     unstar(
         user: String!
+        password: String!
         lecture: UUID!
-    ): Int
+    ): Msg
 }

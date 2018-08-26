@@ -7,11 +7,21 @@ import crypto from 'crypto';
 let compressedURL = '';
 if (process.env.NODE_ENV == 'test') {
     compressedURL = 'http://127.0.0.1:4001/compressed';
-}
-else {
+} else {
     compressedURL = 'https://artpieces.cn/img/compressed';
 }
 
+const passwordRight = async (email, password) => {
+    let u = await model.User.findOne({
+        attributes: ['password', 'salt'],
+        where: { email: email },
+    });
+    let testedPassword = crypto
+        .createHash('md5')
+        .update(password + u.salt)
+        .digest('hex');
+    return u.password == testedPassword;
+};
 
 const getWork = async (obj, args) => {
     let work = await model.Artwork.findOne({
@@ -25,7 +35,10 @@ const getWork = async (obj, args) => {
         ],
         where: { id: args.id },
     });
-    work.compressKeyPhoto = path.join(compressedURL, path.basename(work.keyPhoto));
+    work.compressKeyPhoto = path.join(
+        compressedURL,
+        path.basename(work.keyPhoto)
+    );
     return work;
 };
 
@@ -47,10 +60,16 @@ const getUser = async (obj, args) => {
     });
 
     // Add compressed URL for the portrait and keyPhotos
-    user.artworks.forEach((w) => {
-        w.compressKeyPhoto = path.join(compressedURL, path.basename(w.keyPhoto));
+    user.artworks.forEach(w => {
+        w.compressKeyPhoto = path.join(
+            compressedURL,
+            path.basename(w.keyPhoto)
+        );
     });
-    user.compressedPortrait = path.join(compressedURL, path.basename(user.portrait));
+    user.compressedPortrait = path.join(
+        compressedURL,
+        path.basename(user.portrait)
+    );
     user.repos = await model.Repo.findAll({
         attributes: ['id', 'title', 'keyArtwork', 'starter', 'timestamp'],
         where: { starter: args.email },
@@ -87,7 +106,10 @@ const getLecture = async (obj, args) => {
 
 const insertUser = async (obj, args) => {
     let salt = crypto.randomBytes(10).toString('hex');
-    let passwd = crypto.createHash('md5').update(args.password + salt).digest('hex');
+    let passwd = crypto
+        .createHash('md5')
+        .update(args.password + salt)
+        .digest('hex');
     let user = await model.User.create({
         email: args.email,
         name: args.name,
@@ -99,31 +121,58 @@ const insertUser = async (obj, args) => {
 };
 
 const insertWork = async (obj, args) => {
+    if (!(await passwordRight(args.creator, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
     let work = await model.Artwork.create({
         id: uuidv4(),
         title: args.title,
         description: args.description,
         pictureURL: args.keyPhoto,
-        user: args.creator,
+        creator: args.creator,
     });
     await model.Repo_Childwork.create({
         repo: args.belongingRepo,
         artwork: work.id,
     });
-    return work.id;
+    return {
+        status: 0,
+        payload: work.id,
+    };
 };
 
 const insertRepo = async (obj, args) => {
+    if (!(await passwordRight(args.starter, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
     let repo = await model.Repo.create({
         id: uuidv4(),
         title: args.title,
         keyArtwork: args.keyArtwork,
-        user: args.starter,
+        starter: args.starter,
     });
-    return repo.id;
+    return {
+        status: 0,
+        payload: repo.id,
+    };
 };
 
 const insertLect = async (obj, args) => {
+    if (!(await passwordRight(args.creator, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
     let lect = await model.Lecture.create({
         id: uuidv4(),
         title: args.title,
@@ -132,47 +181,120 @@ const insertLect = async (obj, args) => {
         timestamp: new Date(args.timestamp),
         creator: args.creator,
     });
-    return lect.id;
+    return {
+        status: 0,
+        payload: lect.id,
+    };
 };
 
 const removeWork = async (obj, args) => {
-    let n1 = await model.Artwork.destroy({
+    if (!(await passwordRight(args.creator, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
+    let work = await model.Artwork.findOne({
+        attributes: ['creator'],
+        where: { id: args.id },
+    });
+    if (work.creator != args.creator) {
+        return {
+            status: -2,
+            payload: 'Access Denied: illeagal identity.',
+        };
+    }
+
+    await model.Artwork.destroy({
         where: {
             id: args.id,
-        }
+        },
     });
-    let n2 = await model.Repo_Childwork.destroy({
+    await model.Repo_Childwork.destroy({
         where: {
             artwork: args.id,
-        }
+        },
     });
-    return n1 == 1 && n2 == 1;
+    return {
+        status: 0,
+        payload: 'OK.',
+    };
 };
 
 const removeRepo = async (obj, args) => {
-    let n = await model.Repo.destroy({
+    if (!(await passwordRight(args.starter, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
+    let repo = await model.Repo.findOne({
+        attributes: ['starter'],
+        where: { id: args.id },
+    });
+    if (repo.starter != args.starter) {
+        return {
+            status: -2,
+            payload: 'Access Denied: illeagal identity.',
+        };
+    }
+
+    await model.Repo.destroy({
         where: {
             id: args.id,
-        }
+        },
     });
-    return n == 1;
+    return {
+        status: 0,
+        payload: 'OK.',
+    };
 };
 
 const removeLect = async (obj, args) => {
-    let n = await model.Lecture.destroy({
+    if (!(await passwordRight(args.creator, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
+    let lect = await model.Lecture.findOne({
+        attributes: ['creator'],
+        where: { id: args.id },
+    });
+    if (lect.creator != args.creator) {
+        return {
+            status: -2,
+            payload: 'Access Denied: illeagal identity.',
+        };
+    }
+
+    await model.Lecture.destroy({
         where: {
             id: args.id,
-        }
+        },
     });
     await model.Star_Relation.destroy({
         where: {
             lecture: args.id,
-        }
+        },
     });
-    return n == 1;
+    return {
+        status: 0,
+        payload: 'OK.',
+    };
 };
 
 const updateUser = async (obj, args) => {
+    if (!(await passwordRight(args.email, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
     let [n] = await model.User.update(
         {
             name: args.name,
@@ -185,11 +307,45 @@ const updateUser = async (obj, args) => {
             },
         }
     );
-    return n == 1;
+    if (n == 0) {
+        return {
+            status: -3,
+            payload: 'Object not found.',
+        };
+    }
+
+    return {
+        status: 0,
+        payload: 'OK.',
+    };
 };
 
 const updateWork = async (obj, args) => {
-    let [n] = await model.Artwork.update(
+    if (!(await passwordRight(args.creator, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
+    let work = await model.Artwork.findOne({
+        attributes: ['creator'],
+        where: { id: args.id },
+    });
+    if (!work) {
+        return {
+            status: -3,
+            payload: 'Object not found',
+        };
+    }
+    if (work.creator != args.creator) {
+        return {
+            status: -2,
+            payload: 'Access Denied: illeagal identity.',
+        };
+    }
+
+    await model.Artwork.update(
         {
             title: args.title,
             description: args.description,
@@ -202,11 +358,37 @@ const updateWork = async (obj, args) => {
             },
         }
     );
-    return n == 1;
+    return {
+        status: 0,
+        payload: 'OK.',
+    };
 };
 
 const updateRepo = async (obj, args) => {
-    let [n] = await model.Repo.update(
+    if (!(await passwordRight(args.starter, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
+    let repo = await model.Repo.findOne({
+        attributes: ['starter'],
+        where: { id: args.id },
+    });
+    if (!repo) {
+        return {
+            status: -3,
+            payload: 'Object not found',
+        };
+    }
+    if (repo.starter != args.starter) {
+        return {
+            status: -2,
+            payload: 'Access Denied: illeagal identity.',
+        };
+    }
+    await model.Repo.update(
         {
             title: args.title,
             description: args.description,
@@ -217,11 +399,38 @@ const updateRepo = async (obj, args) => {
             },
         }
     );
-    return n == 1;
+    return {
+        status: 0,
+        payload: 'OK.',
+    };
 };
 
 const updateLect = async (obj, args) => {
-    let [n] = await model.Lecture.update(
+    if (!(await passwordRight(args.creator, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
+    let lect = await model.Lecture.findOne({
+        attributes: ['creator'],
+        where: { id: args.id },
+    });
+    if (!lect) {
+        return {
+            status: -3,
+            payload: 'Object not found.',
+        };
+    }
+    if (lect.creator != args.creator) {
+        return {
+            status: -2,
+            payload: 'Access Denied: illeagal identity.',
+        };
+    }
+
+    await model.Lecture.update(
         {
             title: args.title,
             description: args.description,
@@ -233,10 +442,20 @@ const updateLect = async (obj, args) => {
             },
         }
     );
-    return n == 1;
+    return {
+        status: 0,
+        payload: 'OK.',
+    };
 };
 
 const follow = async (obj, args) => {
+    if (!(await passwordRight(args.origin, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
     await model.Fllw_Relation.create({
         user: args.origin,
         follow: args.target,
@@ -246,10 +465,20 @@ const follow = async (obj, args) => {
             follow: args.target,
         },
     });
-    return count;
+    return {
+        status: 0,
+        payload: count,
+    };
 };
 
 const unfollow = async (obj, args) => {
+    if (!(await passwordRight(args.origin, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
     await model.Fllw_Relation.destroy({
         where: {
             user: args.origin,
@@ -261,10 +490,20 @@ const unfollow = async (obj, args) => {
             follow: args.target,
         },
     });
-    return count;
+    return {
+        status: 0,
+        payload: count,
+    };
 };
 
 const star = async (obj, args) => {
+    if (!(await passwordRight(args.user, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
     await model.Star_Relation.create({
         user: args.user,
         lecture: args.lecture,
@@ -274,10 +513,20 @@ const star = async (obj, args) => {
             lecture: args.lecture,
         },
     });
-    return count;
+    return {
+        status: 0,
+        payload: count,
+    };
 };
 
 const unstar = async (obj, args) => {
+    if (!(await passwordRight(args.user, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
     await model.Star_Relation.destroy({
         where: {
             user: args.user,
@@ -289,7 +538,10 @@ const unstar = async (obj, args) => {
             lecture: args.lecture,
         },
     });
-    return count;
+    return {
+        status: 0,
+        payload: count
+    };
 };
 
 export {
@@ -311,5 +563,5 @@ export {
     follow,
     unfollow,
     star,
-    unstar,   
+    unstar,
 };

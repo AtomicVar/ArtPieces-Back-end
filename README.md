@@ -31,6 +31,11 @@ Artpieces Backend
         `-- index.html          // 供测试用的网页
 ```
 
+## TODOs
+
+- [ ] 用户注册限制（目前用户注册API没有任何限制，可以非法注册大量用户）
+- [x] 身份验证
+
 ## RESTful 移植版
 
 Checkout to branch [restful](https://github.com/ZJUGuoShuai/ArtPieces-Back-end/tree/restful).
