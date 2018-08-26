@@ -2,6 +2,7 @@ import * as model from './model';
 import uuidv4 from 'uuid/v4';
 import 'babel-polyfill';
 import path from 'path';
+import crypto from 'crypto';
 
 let compressedURL = '';
 if (process.env.NODE_ENV == 'test') {
@@ -101,10 +102,13 @@ const updateUser = async (obj, args) => {
 };
 
 const insertUser = async (obj, args) => {
+    let salt = crypto.randomBytes(10).toString('hex');
+    let passwd = crypto.createHash('md5').update(args.password + salt).digest('hex');
     let user = await model.User.create({
         email: args.email,
         name: args.name,
-        password: args.password,
+        password: passwd,
+        salt: salt,
         portrait: args.portrait,
     });
     return user.email;

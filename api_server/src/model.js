@@ -17,6 +17,7 @@ const User = database.define('user', {
     },
     name: STRING,
     password: STRING,
+    salt: STRING,
     portrait: STRING,
 });
 
