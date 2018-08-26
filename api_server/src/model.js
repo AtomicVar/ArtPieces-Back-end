@@ -29,7 +29,7 @@ const Artwork = database.define('artwork', {
     description: TEXT,
     creator: STRING,
     timestamp: DATE,
-    pictureURL: STRING,
+    keyPhoto: STRING,
 });
 
 const Repo = database.define('repo', {

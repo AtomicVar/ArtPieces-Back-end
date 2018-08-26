@@ -10,6 +10,7 @@ type User {
     email: String
     name: String
     portrait: URL
+    compressedPortrait: URL
     artworks: [Artwork]
     repos: [Repo]
 }
@@ -17,6 +18,7 @@ type User {
 type Artwork {
     id: UUID
     keyPhoto: URL
+    compressedKeyPhoto: URL
     title: String
     description: String
     creator: String

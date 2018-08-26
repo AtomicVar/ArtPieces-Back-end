@@ -1,6 +1,16 @@
 import * as model from './model';
 import uuidv4 from 'uuid/v4';
 import 'babel-polyfill';
+import path from 'path';
+
+let compressedURL = '';
+if (process.env.NODE_ENV == 'test') {
+    compressedURL = 'http://127.0.0.1:4001/compressed';
+}
+else {
+    compressedURL = 'http://95.179.143.156:4001/compressed';
+}
+
 
 const getWork = async (obj, args) => {
     let work = await model.Artwork.findOne({
@@ -10,10 +20,11 @@ const getWork = async (obj, args) => {
             'description',
             'creator',
             'timestamp',
-            ['pictureURL', 'keyPhoto'],
+            'keyPhoto',
         ],
         where: { id: args.id },
     });
+    work.compressKeyPhoto = path.join(compressedURL, path.basename(work.keyPhoto));
     return work;
 };
 
@@ -29,13 +40,19 @@ const getUser = async (obj, args) => {
             'description',
             'creator',
             'timestamp',
-            ['pictureURL', 'keyPhoto'],
+            'keyPhoto',
         ],
-        where: { user: args.email },
+        where: { creator: args.email },
     });
+
+    // Add compressed URL for the portrait and keyPhotos
+    user.artworks.forEach((w) => {
+        w.compressKeyPhoto = path.join(compressedURL, path.basename(w.keyPhoto));
+    });
+    user.compressedPortrait = path.join(compressedURL, path.basename(user.portrait));
     user.repos = await model.Repo.findAll({
         attributes: ['id', 'title', 'keyArtwork', 'starter', 'timestamp'],
-        where: { user: args.email },
+        where: { starter: args.email },
     });
     return user;
 };
