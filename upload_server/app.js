@@ -8,7 +8,7 @@ let APIURL = '';
 if (process.env.NODE_ENV == 'test') {
     APIURL = 'http://127.0.0.1:4001/';
 } else {
-    APIURL = 'http://95.179.143.156:4001/';
+    APIURL = 'https://artpieces.cn/img';
 }
 
 const uploadServer = http.createServer((req, res) => {

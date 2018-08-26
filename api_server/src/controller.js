@@ -8,7 +8,7 @@ if (process.env.NODE_ENV == 'test') {
     compressedURL = 'http://127.0.0.1:4001/compressed';
 }
 else {
-    compressedURL = 'http://95.179.143.156:4001/compressed';
+    compressedURL = 'https://artpieces.cn/img/compressed';
 }
 
 
