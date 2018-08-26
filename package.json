@@ -20,6 +20,7 @@
     "mysql2": "^1.5.3",
     "readline-sync": "^1.4.9",
     "sequelize": "^4.38.0",
+    "sharp": "^0.20.7",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
