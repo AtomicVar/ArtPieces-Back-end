@@ -84,18 +84,6 @@ type Query {
 
 type Mutation {
     """
-    **Function:** Update an user (`name`, `password`, `protrait`).
-
-    **Return:** `true` -> succussfully updated. `false` -> the user doesn't exist.
-    """
-    updateUser(
-        email: String!
-        name: String
-        password: String
-        portrait: URL
-    ): Boolean
-
-    """
     **Function:** Insert a new user, that is, sign up a new user.
 
     **Return:** The `email` of the new user.
@@ -106,19 +94,6 @@ type Mutation {
         password: String!
         portrait: URL
     ): UUID
-
-    """
-    **Function:** Update a work (`title`, `description`, `keyPhoto`, `creator`).
-
-    **Return:** `true` -> successfully updated. `false` -> the work doesn't exist.
-    """
-    updateWork(
-        id: UUID!
-        keyPhoto: URL
-        title: String
-        description: String
-        belongingRepo: UUID
-    ): Boolean
 
     """
     **Function:** Insert a new work.
@@ -134,13 +109,6 @@ type Mutation {
     ): UUID
 
     """
-    **Function:** Update a repository (`title`, `description`).
-
-    **Return:** `true` -> successfully updated. `false` -> the repository doesn't exist.
-    """
-    updateRepo(id: UUID!, title: String, description: String): Boolean
-
-    """
     **Function:** Insert a new repository.
 
     **Return:** The UUID of the new repository.
@@ -151,18 +119,6 @@ type Mutation {
         keyArtwork: UUID!
         starter: String!
     ): UUID
-
-    """
-    **Function:** Update a lecture (`title`, `description`, `steps`).
-
-    **Return:** `true` -> successfully updated. `false` -> the lecture doesn't exist.
-    """
-    updateLect(
-        id: UUID!
-        title: String
-        description: String
-        steps: JSON
-    ): Boolean
 
     """
     **Function:** Insert a new lecture.
@@ -177,21 +133,86 @@ type Mutation {
     ): UUID
 
     """
+    **Function:** Remove a work.
+
+    **Return:** `true` if success, `false` if fail.
+    """
+    removeWork(
+        id: UUID!
+    ): Boolean
+
+    """
+    **Function:** Remove a repository.
+
+    **Return:** `true` if success, `false` if fail.
+    """
+    removeRepo(
+        id: UUID!
+    ): Boolean
+
+    """
+    **Function:** Remove a lecture.
+
+    **Return:** `true` if success, `false` if fail.
+    """
+    removeLect(
+        id: UUID!
+    ): Boolean
+
+    """
+    **Function:** Update an user (`name`, `password`, `protrait`).
+
+    **Return:** `true` -> succussfully updated. `false` -> the user doesn't exist.
+    """
+    updateUser(
+        email: String!
+        name: String
+        password: String
+        portrait: URL
+    ): Boolean
+
+    """
+    **Function:** Update a work (`title`, `description`, `keyPhoto`, `creator`).
+
+    **Return:** `true` -> successfully updated. `false` -> the work doesn't exist.
+    """
+    updateWork(
+        id: UUID!
+        keyPhoto: URL
+        title: String
+        description: String
+        belongingRepo: UUID
+    ): Boolean
+
+    """
+    **Function:** Update a repository (`title`, `description`).
+
+    **Return:** `true` -> successfully updated. `false` -> the repository doesn't exist.
+    """
+    updateRepo(
+        id: UUID!
+        title: String,
+        description: String
+    ): Boolean
+
+    """
+    **Function:** Update a lecture (`title`, `description`, `steps`).
+
+    **Return:** `true` -> successfully updated. `false` -> the lecture doesn't exist.
+    """
+    updateLect(
+        id: UUID!
+        title: String
+        description: String
+        steps: JSON
+    ): Boolean
+
+    """
     **Function:** Follow an user. (`origin` follows `target`)
 
     **Return:** The new number of followers of `target`.
     """
     follow(
-        origin: String!
-        target: String!
-    ): Int
-
-    """
-    **Function:** Unfollow an user. (`origin` unfollows `target`)
-
-    **Return:** The new number of followers of `target`.
-    """
-    unfollow(
         origin: String!
         target: String!
     ): Int
@@ -204,6 +225,16 @@ type Mutation {
     star(
         user: String!
         lecture: UUID!
+    ): Int
+
+    """
+    **Function:** Unfollow an user. (`origin` unfollows `target`)
+
+    **Return:** The new number of followers of `target`.
+    """
+    unfollow(
+        origin: String!
+        target: String!
     ): Int
 
     """

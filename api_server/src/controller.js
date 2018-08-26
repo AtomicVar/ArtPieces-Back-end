@@ -125,6 +125,20 @@ const insertWork = async (obj, args) => {
     return work.id;
 };
 
+const removeWork = async (obj, args) => {
+    let n1 = await model.Artwork.destroy({
+        where: {
+            id: args.id,
+        }
+    });
+    let n2 = await model.Repo_Childwork.destroy({
+        where: {
+            artwork: args.id,
+        }
+    });
+    return n1 == 1 && n2 == 1;
+};
+
 const updateRepo = async (obj, args) => {
     let [n] = await model.Repo.update(
         {
@@ -148,6 +162,15 @@ const insertRepo = async (obj, args) => {
         user: args.starter,
     });
     return repo.id;
+};
+
+const removeRepo = async (obj, args) => {
+    let n = await model.Repo.destroy({
+        where: {
+            id: args.id,
+        }
+    });
+    return n == 1;
 };
 
 const updateLect = async (obj, args) => {
@@ -176,6 +199,20 @@ const insertLect = async (obj, args) => {
         creator: args.creator,
     });
     return lect.id;
+};
+
+const removeLect = async (obj, args) => {
+    let n = await model.Lecture.destroy({
+        where: {
+            id: args.id,
+        }
+    });
+    await model.Star_Relation.destroy({
+        where: {
+            lecture: args.id,
+        }
+    });
+    return n == 1;
 };
 
 const follow = async (obj, args) => {
@@ -243,10 +280,13 @@ export {
     insertUser,
     updateWork,
     insertWork,
+    removeWork,
     updateRepo,
     insertRepo,
+    removeRepo,
     updateLect,
     insertLect,
+    removeLect,
     follow,
     unfollow,
     star,
