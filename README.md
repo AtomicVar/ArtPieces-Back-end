@@ -10,21 +10,20 @@
 
 ```
 Artpieces Backend
-    |-- api_server/             // Provides common API service.
-    |   |-- src/                // Source code
-    |   |   |-- app.js          // Entry of the server.
-    |   |   |-- controller.js   // API routines.
-    |   |   |-- misc.js         // An utility module to help launch the server
-    |   |   |                   //+safely.
-    |   |   |-- model.js        // Database models (data structures).
-    |   |   `-- schema.graphql  // GraphQL schema.
-    |   `-- dist/               // Compiled code. Not in this repo.
+    |-- api_server/             // API 服务器
+    |   |-- src/                // 源代码
+    |   |   |-- app.js          // 主程序入口
+    |   |   |-- controller.js   // API 函数
+    |   |   |-- misc.js         // 一个使得服务器更安全启动的模块
+    |   |   |-- model.js        // 数据库模型（数据包定义）
+    |   |   `-- schema.graphql  // GraphQL Schema
+    |   `-- dist/               // Babel 编译后的代码
     |
-    `-- upload_server/          // Provides images upload service.
-        |-- app.js              // Main program.
-        `-- index.html          // A web page for test use.
+    `-- upload_server/          // 文件（图片）上传服务器
+        |-- app.js              // 主程序入口
+        `-- index.html          // 供测试用的网页
 ```
 
-## RESTful porting
+## RESTful 移植版
 
-I'm also developing a RESTful edition of this server. Checkout to branch [restful](https://github.com/ZJUGuoShuai/ArtPieces-Back-end/tree/restful).
+Checkout to branch [restful](https://github.com/ZJUGuoShuai/ArtPieces-Back-end/tree/restful).
