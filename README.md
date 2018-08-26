@@ -6,6 +6,10 @@
 
 [前端地址](https://github.com/Frost-Lee/Art-Pieces-front-end)
 
+[GraphQL Playground / API 测试地址(http://95.179.143.156:4000)](http://95.179.143.156:4000/)
+
+Upload server 地址：http://95.179.143.156:4001/
+
 ## Structure
 
 ```
