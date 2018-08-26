@@ -85,6 +85,93 @@ const getLecture = async (obj, args) => {
     return lect;
 };
 
+const insertUser = async (obj, args) => {
+    let salt = crypto.randomBytes(10).toString('hex');
+    let passwd = crypto.createHash('md5').update(args.password + salt).digest('hex');
+    let user = await model.User.create({
+        email: args.email,
+        name: args.name,
+        password: passwd,
+        salt: salt,
+        portrait: args.portrait,
+    });
+    return user.email;
+};
+
+const insertWork = async (obj, args) => {
+    let work = await model.Artwork.create({
+        id: uuidv4(),
+        title: args.title,
+        description: args.description,
+        pictureURL: args.keyPhoto,
+        user: args.creator,
+    });
+    await model.Repo_Childwork.create({
+        repo: args.belongingRepo,
+        artwork: work.id,
+    });
+    return work.id;
+};
+
+const insertRepo = async (obj, args) => {
+    let repo = await model.Repo.create({
+        id: uuidv4(),
+        title: args.title,
+        keyArtwork: args.keyArtwork,
+        user: args.starter,
+    });
+    return repo.id;
+};
+
+const insertLect = async (obj, args) => {
+    let lect = await model.Lecture.create({
+        id: uuidv4(),
+        title: args.title,
+        description: args.description,
+        steps: args.steps,
+        timestamp: new Date(args.timestamp),
+        creator: args.creator,
+    });
+    return lect.id;
+};
+
+const removeWork = async (obj, args) => {
+    let n1 = await model.Artwork.destroy({
+        where: {
+            id: args.id,
+        }
+    });
+    let n2 = await model.Repo_Childwork.destroy({
+        where: {
+            artwork: args.id,
+        }
+    });
+    return n1 == 1 && n2 == 1;
+};
+
+const removeRepo = async (obj, args) => {
+    let n = await model.Repo.destroy({
+        where: {
+            id: args.id,
+        }
+    });
+    return n == 1;
+};
+
+const removeLect = async (obj, args) => {
+    let n = await model.Lecture.destroy({
+        where: {
+            id: args.id,
+        }
+    });
+    await model.Star_Relation.destroy({
+        where: {
+            lecture: args.id,
+        }
+    });
+    return n == 1;
+};
+
 const updateUser = async (obj, args) => {
     let [n] = await model.User.update(
         {
@@ -99,19 +186,6 @@ const updateUser = async (obj, args) => {
         }
     );
     return n == 1;
-};
-
-const insertUser = async (obj, args) => {
-    let salt = crypto.randomBytes(10).toString('hex');
-    let passwd = crypto.createHash('md5').update(args.password + salt).digest('hex');
-    let user = await model.User.create({
-        email: args.email,
-        name: args.name,
-        password: passwd,
-        salt: salt,
-        portrait: args.portrait,
-    });
-    return user.email;
 };
 
 const updateWork = async (obj, args) => {
@@ -131,35 +205,6 @@ const updateWork = async (obj, args) => {
     return n == 1;
 };
 
-const insertWork = async (obj, args) => {
-    let work = await model.Artwork.create({
-        id: uuidv4(),
-        title: args.title,
-        description: args.description,
-        pictureURL: args.keyPhoto,
-        user: args.creator,
-    });
-    await model.Repo_Childwork.create({
-        repo: args.belongingRepo,
-        artwork: work.id,
-    });
-    return work.id;
-};
-
-const removeWork = async (obj, args) => {
-    let n1 = await model.Artwork.destroy({
-        where: {
-            id: args.id,
-        }
-    });
-    let n2 = await model.Repo_Childwork.destroy({
-        where: {
-            artwork: args.id,
-        }
-    });
-    return n1 == 1 && n2 == 1;
-};
-
 const updateRepo = async (obj, args) => {
     let [n] = await model.Repo.update(
         {
@@ -172,25 +217,6 @@ const updateRepo = async (obj, args) => {
             },
         }
     );
-    return n == 1;
-};
-
-const insertRepo = async (obj, args) => {
-    let repo = await model.Repo.create({
-        id: uuidv4(),
-        title: args.title,
-        keyArtwork: args.keyArtwork,
-        user: args.starter,
-    });
-    return repo.id;
-};
-
-const removeRepo = async (obj, args) => {
-    let n = await model.Repo.destroy({
-        where: {
-            id: args.id,
-        }
-    });
     return n == 1;
 };
 
@@ -207,32 +233,6 @@ const updateLect = async (obj, args) => {
             },
         }
     );
-    return n == 1;
-};
-
-const insertLect = async (obj, args) => {
-    let lect = await model.Lecture.create({
-        id: uuidv4(),
-        title: args.title,
-        description: args.description,
-        steps: args.steps,
-        timestamp: new Date(args.timestamp),
-        creator: args.creator,
-    });
-    return lect.id;
-};
-
-const removeLect = async (obj, args) => {
-    let n = await model.Lecture.destroy({
-        where: {
-            id: args.id,
-        }
-    });
-    await model.Star_Relation.destroy({
-        where: {
-            lecture: args.id,
-        }
-    });
     return n == 1;
 };
 
