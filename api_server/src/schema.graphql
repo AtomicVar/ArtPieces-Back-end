@@ -94,19 +94,19 @@ type Mutation {
     """
     **Function:** Insert a new user, that is, sign up a new user.
 
-    **Return:** The `email` of the new user.
+    **Status-0 Payload:** The `email` of the new user.
     """
     insertUser(
         email: String!
         name: String!
         password: String!
         portrait: URL
-    ): UUID
+    ): Msg
 
     """
     **Function:** Insert a new work.
 
-    **Return:** The UUID of the new work.
+    **Status-0 Payload:** The UUID of the new work.
     """
     insertWork(
         creator: String!
@@ -120,7 +120,7 @@ type Mutation {
     """
     **Function:** Insert a new repository.
 
-    **Return:** The UUID of the new repository.
+    **Status-0 Payload:** The UUID of the new repository.
     """
     insertRepo(
         title: String!
@@ -133,7 +133,7 @@ type Mutation {
     """
     **Function:** Insert a new lecture.
 
-    **Return:** `true` -> successfully inserted. `false` -> failure.
+    **Status-0 Payload:** `true` -> successfully inserted. `false` -> failure.
     """
     insertLect(
         title: String!
@@ -146,7 +146,7 @@ type Mutation {
     """
     **Function:** Remove a work.
 
-    **Return:** `true` if success, `false` if fail.
+    **Status-0 Payload:** `true` if success, `false` if fail.
     """
     removeWork(
         id: UUID!
@@ -157,7 +157,7 @@ type Mutation {
     """
     **Function:** Remove a repository.
 
-    **Return:** `true` if success, `false` if fail.
+    **Status-0 Payload:** `true` if success, `false` if fail.
     """
     removeRepo(
         id: UUID!
@@ -168,7 +168,7 @@ type Mutation {
     """
     **Function:** Remove a lecture.
 
-    **Return:** `true` if success, `false` if fail.
+    **Status-0 Payload:** `true` if success, `false` if fail.
     """
     removeLect(
         id: UUID!
@@ -179,7 +179,7 @@ type Mutation {
     """
     **Function:** Update an user (`name`, `password`, `protrait`).
 
-    **Return:** `true` -> succussfully updated. `false` -> the user doesn't exist.
+    **Status-0 Payload:** `true` -> succussfully updated. `false` -> the user doesn't exist.
     """
     updateUser(
         email: String!
@@ -192,7 +192,7 @@ type Mutation {
     """
     **Function:** Update a work (`title`, `description`, `keyPhoto`, `creator`).
 
-    **Return:** `true` -> successfully updated. `false` -> the work doesn't exist.
+    **Status-0 Payload:** `true` -> successfully updated. `false` -> the work doesn't exist.
     """
     updateWork(
         id: UUID!
@@ -206,7 +206,7 @@ type Mutation {
     """
     **Function:** Update a repository (`title`, `description`).
 
-    **Return:** `true` -> successfully updated. `false` -> the repository doesn't exist.
+    **Status-0 Payload:** `true` -> successfully updated. `false` -> the repository doesn't exist.
     """
     updateRepo(
         id: UUID!
@@ -219,7 +219,7 @@ type Mutation {
     """
     **Function:** Update a lecture (`title`, `description`, `steps`).
 
-    **Return:** `true` -> successfully updated. `false` -> the lecture doesn't exist.
+    **Status-0 Payload:** `true` -> successfully updated. `false` -> the lecture doesn't exist.
     """
     updateLect(
         id: UUID!
@@ -233,7 +233,7 @@ type Mutation {
     """
     **Function:** Follow an user. (`origin` follows `target`)
 
-    **Return:** The new number of followers of `target`.
+    **Status-0 Payload:** The new number of followers of `target`.
     """
     follow(
         origin: String!
@@ -244,7 +244,7 @@ type Mutation {
     """
     **Function:** Star a lecture.
 
-    **Return:** The new number of stars of the lecture.
+    **Status-0 Payload:** The new number of stars of the lecture.
     """
     star(
         user: String!
@@ -255,7 +255,7 @@ type Mutation {
     """
     **Function:** Unfollow an user. (`origin` unfollows `target`)
 
-    **Return:** The new number of followers of `target`.
+    **Status-0 Payload:** The new number of followers of `target`.
     """
     unfollow(
         origin: String!
@@ -266,7 +266,7 @@ type Mutation {
     """
     **Function:** Unstar a lecture.
 
-    **Return:** The new number of stars of the lecture.
+    **Status-0 Payload:** The new number of stars of the lecture.
     """
     unstar(
         user: String!
