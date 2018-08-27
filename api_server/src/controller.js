@@ -117,7 +117,10 @@ const insertUser = async (obj, args) => {
         salt: salt,
         portrait: args.portrait,
     });
-    return user.email;
+    return {
+        status: 0,
+        payload: user.email,
+    };
 };
 
 const insertWork = async (obj, args) => {
@@ -540,7 +543,7 @@ const unstar = async (obj, args) => {
     });
     return {
         status: 0,
-        payload: count
+        payload: count,
     };
 };
 
