@@ -18,6 +18,7 @@ const uploadServer = http.createServer((req, res) => {
         let msg = {};
 
         form.on('file', (name, file) => {
+            console.log(`Uploading image ${name}.`);
             if (file.type == 'image/png') {
                 // Use absolute path while saving files
                 // Use relative path while giving download URLs
@@ -44,6 +45,7 @@ const uploadServer = http.createServer((req, res) => {
                 msg.url = APIURL + originalRelativePath;
                 msg.compressedURL = APIURL + compressedRelativePath;
             } else {
+                console.log('Bad file type.');
                 msg.error = 'PNG wanted!';
             }
         });
@@ -59,6 +61,7 @@ const uploadServer = http.createServer((req, res) => {
             } else {
                 res.statusCode = 200;
             }
+            console.log('Image uploaded.');
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify(msg));
         });
@@ -70,6 +73,7 @@ const uploadServer = http.createServer((req, res) => {
 
     // Download a original file
     else if (req.url.indexOf('/original') == 0 && req.method == 'GET') {
+        console.log('Trying download original.');
         let filePath = path.join(__dirname, req.url.slice(1));
         fs.stat(filePath, (err, stat) => {
             if (err) {
@@ -91,6 +95,7 @@ const uploadServer = http.createServer((req, res) => {
             }
         });
     } else if (req.url.indexOf('/compressed') == 0 && req.method == 'GET') {
+        console.log('Trying download compressed.');
         let filePath = path.join(__dirname, req.url.slice(1));
         fs.stat(filePath, (err, stat) => {
             if (err) {
@@ -114,6 +119,7 @@ const uploadServer = http.createServer((req, res) => {
     }
     // Malformed URL
     else {
+        console.log('Bad request.');
         res.statusCode = 400;
         res.end('Bad Request.');
     }
