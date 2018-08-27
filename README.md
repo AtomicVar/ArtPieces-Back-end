@@ -33,6 +33,7 @@ Upload server 地址：https://artpieces.cn/img
 | -1     | Access Denied: wrong password.    | 用户密码错误                     |
 | -2     | Access Denied: illeagal identity. | 用户身份不符合，试图改动他人数据 |
 | -3     | Object Not Found                  | 数据操作目标不存在               |
+| 1      | ?                                 | 其他类型错误，payload 不确定     |
 
 ## Structure
 
@@ -56,6 +57,7 @@ Artpieces Backend
 
 -   [ ] 用户注册限制（目前用户注册 API 没有任何限制，可以非法注册大量用户）
 -   [x] 身份验证
+-   [ ] 完善的错误处理系统
 
 ## RESTful 移植版
 
