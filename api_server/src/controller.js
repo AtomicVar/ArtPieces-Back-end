@@ -310,7 +310,7 @@ const updateUser = async (obj, args) => {
     if (n == 0) {
         return {
             status: -3,
-            payload: 'Object not found.',
+            payload: 'Object Not Found.',
         };
     }
 
@@ -335,7 +335,7 @@ const updateWork = async (obj, args) => {
     if (!work) {
         return {
             status: -3,
-            payload: 'Object not found',
+            payload: 'Object Not Found',
         };
     }
     if (work.creator != args.creator) {
@@ -379,7 +379,7 @@ const updateRepo = async (obj, args) => {
     if (!repo) {
         return {
             status: -3,
-            payload: 'Object not found',
+            payload: 'Object Not Found',
         };
     }
     if (repo.starter != args.starter) {
@@ -420,7 +420,7 @@ const updateLect = async (obj, args) => {
     if (!lect) {
         return {
             status: -3,
-            payload: 'Object not found.',
+            payload: 'Object Not Found.',
         };
     }
     if (lect.creator != args.creator) {
