@@ -212,7 +212,7 @@ const removeWork = async (obj, args) => {
     if (work.creator != args.creator) {
         return {
             status: -2,
-            payload: 'Access Denied: illeagal identity.',
+            payload: 'Access Denied: illegal identity.',
         };
     }
 
@@ -247,7 +247,7 @@ const removeRepo = async (obj, args) => {
     if (repo.starter != args.starter) {
         return {
             status: -2,
-            payload: 'Access Denied: illeagal identity.',
+            payload: 'Access Denied: illegal identity.',
         };
     }
 
@@ -277,7 +277,7 @@ const removeLect = async (obj, args) => {
     if (lect.creator != args.creator) {
         return {
             status: -2,
-            payload: 'Access Denied: illeagal identity.',
+            payload: 'Access Denied: illegal identity.',
         };
     }
 
@@ -351,7 +351,7 @@ const updateWork = async (obj, args) => {
     if (work.creator != args.creator) {
         return {
             status: -2,
-            payload: 'Access Denied: illeagal identity.',
+            payload: 'Access Denied: illegal identity.',
         };
     }
 
@@ -395,7 +395,7 @@ const updateRepo = async (obj, args) => {
     if (repo.starter != args.starter) {
         return {
             status: -2,
-            payload: 'Access Denied: illeagal identity.',
+            payload: 'Access Denied: illegal identity.',
         };
     }
     await model.Repo.update(
@@ -436,7 +436,7 @@ const updateLect = async (obj, args) => {
     if (lect.creator != args.creator) {
         return {
             status: -2,
-            payload: 'Access Denied: illeagal identity.',
+            payload: 'Access Denied: illegal identity.',
         };
     }
 
