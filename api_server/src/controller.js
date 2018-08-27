@@ -110,17 +110,24 @@ const insertUser = async (obj, args) => {
         .createHash('md5')
         .update(args.password + salt)
         .digest('hex');
-    let user = await model.User.create({
-        email: args.email,
-        name: args.name,
-        password: passwd,
-        salt: salt,
-        portrait: args.portrait,
-    });
-    return {
-        status: 0,
-        payload: user.email,
-    };
+    try {
+        let user = await model.User.create({
+            email: args.email,
+            name: args.name,
+            password: passwd,
+            salt: salt,
+            portrait: args.portrait,
+        });
+        return {
+            status: 0,
+            payload: user.email,
+        };
+    } catch (e) {
+        return {
+            status: 1,
+            payload: e.message,
+        };
+    }
 };
 
 const insertWork = async (obj, args) => {
