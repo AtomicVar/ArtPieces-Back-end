@@ -3,6 +3,9 @@ import uuidv4 from 'uuid/v4';
 import 'babel-polyfill';
 import path from 'path';
 import crypto from 'crypto';
+import request from 'request-promise-native';
+
+import APPCODE from '../../APPCODE.json';
 
 let compressedURL = '';
 if (process.env.NODE_ENV == 'test') {
@@ -22,6 +25,21 @@ const passwordRight = async (email, password) => {
         .digest('hex');
     return u.password == testedPassword;
 };
+
+const destroyImage = async (img) => {
+    let options = {
+        method: 'POST',
+        uri: 'http://127.0.0.1:4001/destroy',
+        headers: {
+            'appcode': APPCODE,
+        },
+        json: {
+            filename: img,
+        },
+    };
+    let body = await request(options);
+    return body == 'OK';
+}
 
 const getWork = async (obj, args) => {
     let work = await model.Artwork.findOne({
@@ -142,8 +160,9 @@ const insertWork = async (obj, args) => {
         id: uuidv4(),
         title: args.title,
         description: args.description,
-        pictureURL: args.keyPhoto,
+        keyPhoto: args.keyPhoto,
         creator: args.creator,
+        timestamp: args.timestamp,
     });
     await model.Repo_Childwork.create({
         repo: args.belongingRepo,
@@ -206,7 +225,7 @@ const removeWork = async (obj, args) => {
     }
 
     let work = await model.Artwork.findOne({
-        attributes: ['creator'],
+        attributes: ['creator', 'keyPhoto'],
         where: { id: args.id },
     });
     if (work.creator != args.creator) {
@@ -214,6 +233,10 @@ const removeWork = async (obj, args) => {
             status: -2,
             payload: 'Access Denied: illegal identity.',
         };
+    }
+
+    if ( !(await destroyImage(path.basename(work.keyPhoto))) ) {
+        console.error('Error occurred in destroying an image.');
     }
 
     await model.Artwork.destroy({

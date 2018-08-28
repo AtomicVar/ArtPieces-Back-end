@@ -4,6 +4,17 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs');
 
+// Generate a random APPCODE in the current directory.
+// The APPCODE can insure that the /destroy is sent from localhost.
+const crypto = require('crypto');
+fs.writeFileSync(
+    path.join(__dirname, '../APPCODE.json'),
+    JSON.stringify(crypto.randomBytes(20).toString('hex'))
+);
+console.log('APPCODE.json generated.');
+const APPCODE = require('../APPCODE.json');
+
+// Provide different download link in different modes
 let APIURL = '';
 if (process.env.NODE_ENV == 'test') {
     APIURL = 'http://127.0.0.1:4001/';
@@ -72,7 +83,7 @@ const uploadServer = http.createServer((req, res) => {
     }
 
     // Download a original file
-    else if (req.url.indexOf('/original') == 0 && req.method == 'GET') {
+    else if (req.url.startsWith('/original') && req.method == 'GET') {
         console.log('Trying download original.');
         let filePath = path.join(__dirname, req.url.slice(1));
         fs.stat(filePath, (err, stat) => {
@@ -94,7 +105,7 @@ const uploadServer = http.createServer((req, res) => {
                 });
             }
         });
-    } else if (req.url.indexOf('/compressed') == 0 && req.method == 'GET') {
+    } else if (req.url.startsWith('/compressed') && req.method == 'GET') {
         console.log('Trying download compressed.');
         let filePath = path.join(__dirname, req.url.slice(1));
         fs.stat(filePath, (err, stat) => {
@@ -113,10 +124,44 @@ const uploadServer = http.createServer((req, res) => {
                 stream.on('error', () => {
                     res.statusCode = 500;
                     res.end('Internal Server Error.');
+                    return;
                 });
             }
         });
     }
+
+    // Destroy an image
+    else if (req.url == '/destroy' && req.method == 'POST') {
+        // Verify the APPCODE
+        if (req.headers.appcode != APPCODE) {
+            res.statusCode = 400;
+            res.end('Permission denied!');
+            return;
+        }
+
+        let rawData = '';
+        req.on('data', chunk => {
+            rawData += chunk;
+        });
+        req.on('end', () => {
+            console.log(rawData);
+            try {
+                let file = JSON.parse(rawData).filename;
+                fs.unlink(path.join(__dirname, 'original', file), err => {
+                    if (err) throw err;
+                    console.log(file + ' is deleted.');
+                });
+                fs.unlink(path.join(__dirname, 'compressed', file), err => {
+                    if (err) throw err;
+                    console.log(file + ' is deleted(compressed).');
+                });
+                res.end('OK');
+            } catch (e) {
+                console.error(e.message);
+            }
+        });
+    }
+
     // Malformed URL
     else {
         console.log('Bad request.');

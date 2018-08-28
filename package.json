@@ -19,6 +19,8 @@
     "graphql": "^0.13.2",
     "mysql2": "^1.5.3",
     "readline-sync": "^1.4.9",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
     "sequelize": "^4.38.0",
     "sharp": "^0.20.7",
     "uuid": "^3.3.2"
