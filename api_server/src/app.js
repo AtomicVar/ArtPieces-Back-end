@@ -22,7 +22,6 @@ const resolvers = {
         insertRepo: controller.insertRepo,
         insertLect: controller.insertLect,
 
-        removeUser: controller.removeUser,
         removeWork: controller.removeWork,
         removeRepo: controller.removeRepo,
         removeLect: controller.removeLect,
