@@ -17,14 +17,25 @@ const resolvers = {
     },
 
     Mutation: {
-        updateUser: controller.updateUser,
         insertUser: controller.insertUser,
-        updateWork: controller.updateWork,
         insertWork: controller.insertWork,
-        updateRepo: controller.updateRepo,
         insertRepo: controller.insertRepo,
-        updateLect: controller.updateLect,
         insertLect: controller.insertLect,
+
+        removeUser: controller.removeUser,
+        removeWork: controller.removeWork,
+        removeRepo: controller.removeRepo,
+        removeLect: controller.removeLect,
+
+        updateUser: controller.updateUser,
+        updateWork: controller.updateWork,
+        updateRepo: controller.updateRepo,
+        updateLect: controller.updateLect,
+
+        star: controller.star,
+        unstar: controller.unstar,
+        follow: controller.follow,
+        unfollow: controller.unfollow,
     },
 };
 
