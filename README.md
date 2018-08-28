@@ -4,6 +4,8 @@
 
 黑客与画家的共同之处，在于他们都是创作者。与作曲家、建筑师、作家一样，黑客和画家都是试图创作出优秀的作品。他们本质上都不是在做研究，虽然在创作的过程中，他们可能会发现一些新技术（当然那样更好）。——《黑客与画家》
 
+---
+
 [前端地址](https://github.com/Frost-Lee/Art-Pieces-front-end)
 
 [GraphQL Playground / API 测试地址(https://artpieces.cn/api)](https://artpieces.cn/api)
@@ -58,7 +60,7 @@ Artpieces Backend
 -   [ ] 用户注册限制（目前用户注册 API 没有任何限制，可以非法注册大量用户）
 -   [x] 身份验证
 -   [ ] 完善的错误处理系统
--   [x] 图片上传的销毁
+-   [x] 旧图片的自动销毁
 
 ## RESTful 移植版
 
