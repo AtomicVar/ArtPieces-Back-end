@@ -4,3 +4,5 @@ upload_server/files/
 .vscode/
 *.txt
 *.png
+APPCODE.json
+.tern-project
