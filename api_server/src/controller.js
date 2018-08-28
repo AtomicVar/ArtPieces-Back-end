@@ -331,7 +331,7 @@ const updateUser = async (obj, args) => {
     let [n] = await model.User.update(
         {
             name: args.name,
-            password: args.password,
+            password: args.newPassword,
             portrait: args.portrait,
         },
         {
