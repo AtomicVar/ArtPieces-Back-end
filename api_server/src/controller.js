@@ -140,11 +140,18 @@ const insertUser = async (obj, args) => {
             status: 0,
             payload: user.email,
         };
-    } catch (e) {
-        return {
-            status: 1,
-            payload: e.message,
-        };
+    } catch (err) {
+        if (err.name == 'SequelizeUniqueConstraintError') {
+            return {
+                status: -4,
+                payload: 'The target is already in the database!',
+            };
+        } else {
+            return {
+                status: 1,
+                payload: err,
+            };
+        }
     }
 };
 
@@ -156,22 +163,36 @@ const insertWork = async (obj, args) => {
         };
     }
 
-    let work = await model.Artwork.create({
-        id: args.id,
-        title: args.title,
-        description: args.description,
-        keyPhoto: args.keyPhoto,
-        creator: args.creator,
-        timestamp: args.timestamp,
-    });
-    await model.Repo_Childwork.create({
-        repo: args.belongingRepo,
-        artwork: work.id,
-    });
-    return {
-        status: 0,
-        payload: work.id,
-    };
+    try {
+        let work = await model.Artwork.create({
+            id: args.id,
+            title: args.title,
+            description: args.description,
+            keyPhoto: args.keyPhoto,
+            creator: args.creator,
+            timestamp: args.timestamp,
+        });
+        await model.Repo_Childwork.create({
+            repo: args.belongingRepo,
+            artwork: work.id,
+        });
+        return {
+            status: 0,
+            payload: work.id,
+        };
+    } catch (err) {
+        if (err.name == 'SequelizeUniqueConstraintError') {
+            return {
+                status: -4,
+                payload: 'The target is already in the database!',
+            };
+        } else {
+            return {
+                status: 1,
+                payload: err,
+            };
+        }
+    }
 };
 
 const insertRepo = async (obj, args) => {
@@ -182,16 +203,30 @@ const insertRepo = async (obj, args) => {
         };
     }
 
-    let repo = await model.Repo.create({
-        id: args.id,
-        title: args.title,
-        keyArtwork: args.keyArtwork,
-        starter: args.starter,
-    });
-    return {
-        status: 0,
-        payload: repo.id,
-    };
+    try {
+        let repo = await model.Repo.create({
+            id: args.id,
+            title: args.title,
+            keyArtwork: args.keyArtwork,
+            starter: args.starter,
+        });
+        return {
+            status: 0,
+            payload: repo.id,
+        };
+    } catch (err) {
+        if (err.name == 'SequelizeUniqueConstraintError') {
+            return {
+                status: -4,
+                payload: 'The target is already in the database!',
+            };
+        } else {
+            return {
+                status: 1,
+                payload: err,
+            };
+        }
+    }
 };
 
 const insertLect = async (obj, args) => {
@@ -202,18 +237,32 @@ const insertLect = async (obj, args) => {
         };
     }
 
-    let lect = await model.Lecture.create({
-        id: args.id,
-        title: args.title,
-        description: args.description,
-        steps: args.steps,
-        timestamp: new Date(args.timestamp),
-        creator: args.creator,
-    });
-    return {
-        status: 0,
-        payload: lect.id,
-    };
+    try {
+        let lect = await model.Lecture.create({
+            id: args.id,
+            title: args.title,
+            description: args.description,
+            steps: args.steps,
+            timestamp: new Date(args.timestamp),
+            creator: args.creator,
+        });
+        return {
+            status: 0,
+            payload: lect.id,
+        };
+    } catch (err) {
+        if (err.name == 'SequelizeUniqueConstraintError') {
+            return {
+                status: -4,
+                payload: 'The target is already in the database!',
+            };
+        } else {
+            return {
+                status: 1,
+                payload: err,
+            };
+        }
+    }
 };
 
 const removeWork = async (obj, args) => {

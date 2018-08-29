@@ -30,12 +30,13 @@ Upload server 地址：https://artpieces.cn/img
 
 当`status`不为`0`时表示有错误发生，这时`payload`是一个说明错误原因的`String`。目前支持的错误类型有：
 
-| status | payload                           | description                      |
-| ------ | --------------------------------- | -------------------------------- |
-| -1     | Access Denied: wrong password.    | 用户密码错误                     |
-| -2     | Access Denied: illegal identity. | 用户身份不符合，试图改动他人数据 |
-| -3     | Object Not Found                  | 数据操作目标不存在               |
-| 1      | ?                                 | 其他类型错误，payload 不确定     |
+| status | payload                                | description                      |
+| ------ | -------------------------------------- | -------------------------------- |
+| -1     | Access Denied: wrong password.         | 用户密码错误                     |
+| -2     | Access Denied: illegal identity.       | 用户身份不符合，试图改动他人数据 |
+| -3     | Object Not Found                       | 数据操作目标不存在               |
+| -4     | The target is already in the database! | 插入目标在数据库中已存在         |
+| 1      | ?                                      | 其他类型错误，payload 不确定     |
 
 ## Structure
 
