@@ -1,10 +1,10 @@
 import { ApolloServer } from 'apollo-server';
 import schema from './schema.graphql';
 import * as controller from './controller';
-import { showPrompt } from './misc';
+import { safeLaunch } from './misc';
 
-/* Show prompt before starting the server. */
-showPrompt();
+/* Launch the server safely. */
+safeLaunch();
 
 const typeDefs = schema;
 
