@@ -10,6 +10,7 @@ const typeDefs = schema;
 
 const resolvers = {
     Query: {
+        login: controller.login,
         getWork: controller.getWork,
         getUser: controller.getUser,
         getRepo: controller.getRepo,

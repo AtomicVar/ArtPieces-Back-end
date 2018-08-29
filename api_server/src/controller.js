@@ -44,6 +44,35 @@ const destroyImage = async img => {
 
 // APIs
 
+const login = async (obj, args) => {
+    let user = await model.User.findOne({
+        attributes: ['password', 'salt'],
+        where: { email: args.email },
+    });
+    if (user) {
+        let encodedPasswd = crypto
+            .createHash('md5')
+            .update(args.password + user.salt)
+            .digest('hex');
+        if (encodedPasswd == user.password) {
+            return {
+                status: 0,
+                payload: 'Loggin successfully.',
+            };
+        } else {
+            return {
+                status: -1,
+                payload: 'Access Denied: wrong password',
+            };
+        }
+    } else {
+        return {
+            status: -3,
+            payload: 'Object not found',
+        };
+    }
+};
+
 const getWork = async (obj, args) => {
     let work = await model.Artwork.findOne({
         attributes: [
@@ -672,6 +701,7 @@ const extendFeed = async (obj, args) => {
 };
 
 export {
+    login,
     getUser,
     getWork,
     getRepo,

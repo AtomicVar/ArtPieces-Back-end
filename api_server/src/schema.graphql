@@ -54,6 +54,15 @@ type Lecture {
 
 type Query {
     """
+    **Function:** Login.
+
+    **Explaination:** Verify the user.
+
+    **Status-0 Payload:** 'Loggin successfully.'.
+    """
+    login(email: Email!, password: String!): Msg
+
+    """
     **Function:** Get the information of an artwork.
 
     **Explaination:** `UUID` is a string.
