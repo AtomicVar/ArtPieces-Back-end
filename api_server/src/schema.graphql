@@ -134,6 +134,7 @@ type Mutation {
         description: String
         keyPhoto: URL!
         belongingRepo: UUID
+        timestamp: Datetime!
     ): Msg
 
     """
@@ -148,6 +149,7 @@ type Mutation {
         keyArtwork: UUID!
         starter: String!
         password: String!
+        timestamp: Datetime!
     ): Msg
 
     """
@@ -162,6 +164,7 @@ type Mutation {
         steps: JSON
         creator: String!
         password: String!
+        timestamp: Datetime!
     ): Msg
 
     """
