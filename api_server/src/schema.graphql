@@ -94,18 +94,18 @@ type Query {
 
     **Explaination:** The `timestamp` is the timestamp of the first artwork in your last feed list.
 
-    **Return:** a list of `Feed`.
+    **Return:** a list of `Artwork`.
     """
-    getFeed(user: Email!, timestamp: Datetime!): [Feed]
+    getFeed(user: Email!, timestamp: Datetime!): [Artwork]
 
     """
     **Function:** Extend an information feed list.
 
     **Explaination:** The `timestamp` is the timestamp of the last artwork in your last feed list.
 
-    **Return:** a list of `Feed`.
+    **Return:** a list of `Artwork`.
     """
-    extendFeed(user: Email!, timestamp: Datetime!): [Feed]
+    extendFeed(user: Email!, timestamp: Datetime!): [Artwork]
 }
 
 type Mutation {
