@@ -3,6 +3,7 @@ import 'babel-polyfill';
 import path from 'path';
 import crypto from 'crypto';
 import request from 'request-promise-native';
+import { Op } from 'sequelize';
 
 /*
  * The APPCODE is a certification used then destroying images through
@@ -628,6 +629,48 @@ const unstar = async (obj, args) => {
     };
 };
 
+const getFeed = async (obj, args) => {
+    let works = model.Artwork.findAll({
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'creator',
+            'timestamp',
+            'keyPhoto',
+        ],
+        order: ['timestamp', 'DESC'],
+        limit: 10,
+        where: {
+            timestamp: {
+                [Op.gt]: new Date(args.timestamp),
+            },
+        },
+    });
+    return works;
+};
+
+const extendFeed = async (obj, args) => {
+    let works = model.Artwork.findAll({
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'creator',
+            'timestamp',
+            'keyPhoto',
+        ],
+        order: ['timestamp', 'DESC'],
+        limit: 10,
+        where: {
+            timestamp: {
+                [Op.lt]: new Date(args.timestamp),
+            },
+        },
+    });
+    return works;
+};
+
 export {
     getUser,
     getWork,
@@ -648,4 +691,6 @@ export {
     unfollow,
     star,
     unstar,
+    getFeed,
+    extendFeed,
 };

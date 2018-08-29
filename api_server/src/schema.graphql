@@ -88,6 +88,24 @@ type Query {
     **Return:** an `Lecture`.
     """
     getLecture(id: UUID!): Lecture
+
+    """
+    **Function:** Get a new artworks information feed list.
+
+    **Explaination:** The `timestamp` is the timestamp of the first artwork in your last feed list.
+
+    **Return:** a list of `Feed`.
+    """
+    getFeed(user: Email!, timestamp: Datetime!): [Feed]
+
+    """
+    **Function:** Extend an information feed list.
+
+    **Explaination:** The `timestamp` is the timestamp of the last artwork in your last feed list.
+
+    **Return:** a list of `Feed`.
+    """
+    extendFeed(user: Email!, timestamp: Datetime!): [Feed]
 }
 
 type Mutation {
