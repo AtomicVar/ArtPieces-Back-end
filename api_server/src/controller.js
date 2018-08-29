@@ -639,7 +639,7 @@ const getFeed = async (obj, args) => {
             'timestamp',
             'keyPhoto',
         ],
-        order: ['timestamp', 'DESC'],
+        order: [['timestamp', 'DESC']],
         limit: 10,
         where: {
             timestamp: {
@@ -660,7 +660,7 @@ const extendFeed = async (obj, args) => {
             'timestamp',
             'keyPhoto',
         ],
-        order: ['timestamp', 'DESC'],
+        order: [['timestamp', 'DESC']],
         limit: 10,
         where: {
             timestamp: {
