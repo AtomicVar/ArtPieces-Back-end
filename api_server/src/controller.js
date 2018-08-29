@@ -157,7 +157,7 @@ const insertWork = async (obj, args) => {
     }
 
     let work = await model.Artwork.create({
-        id: uuidv4(),
+        id: args.id,
         title: args.title,
         description: args.description,
         keyPhoto: args.keyPhoto,
@@ -183,7 +183,7 @@ const insertRepo = async (obj, args) => {
     }
 
     let repo = await model.Repo.create({
-        id: uuidv4(),
+        id: args.id,
         title: args.title,
         keyArtwork: args.keyArtwork,
         starter: args.starter,
@@ -203,7 +203,7 @@ const insertLect = async (obj, args) => {
     }
 
     let lect = await model.Lecture.create({
-        id: uuidv4(),
+        id: args.id,
         title: args.title,
         description: args.description,
         steps: args.steps,
@@ -235,7 +235,7 @@ const removeWork = async (obj, args) => {
         };
     }
 
-    if ( !(await destroyImage(path.basename(work.keyPhoto))) ) {
+    if (!(await destroyImage(path.basename(work.keyPhoto)))) {
         console.error('Error occurred in destroying an image.');
     }
 
