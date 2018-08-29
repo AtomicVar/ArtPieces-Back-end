@@ -69,7 +69,7 @@ type Query {
 
     **Return:** an `User`.
     """
-    getUser(email: String!): User
+    getUser(email: Email!): User
 
     """
     **Function:** Get the information of a repository.
@@ -109,6 +109,7 @@ type Mutation {
     **Status-0 Payload:** The UUID of the new work.
     """
     insertWork(
+        id: UUID!
         creator: String!
         password: String!
         title: String!
@@ -123,6 +124,7 @@ type Mutation {
     **Status-0 Payload:** The UUID of the new repository.
     """
     insertRepo(
+        id: UUID!
         title: String!
         description: String
         keyArtwork: UUID!
@@ -136,6 +138,7 @@ type Mutation {
     **Status-0 Payload:** `true` -> successfully inserted. `false` -> failure.
     """
     insertLect(
+        id: UUID!
         title: String!
         description: String
         steps: JSON
