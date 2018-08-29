@@ -26,12 +26,12 @@ const passwordRight = async (email, password) => {
     return u.password == testedPassword;
 };
 
-const destroyImage = async (img) => {
+const destroyImage = async img => {
     let options = {
         method: 'POST',
         uri: 'http://127.0.0.1:4001/destroy',
         headers: {
-            'appcode': APPCODE,
+            appcode: APPCODE,
         },
         json: {
             filename: img,
@@ -39,7 +39,7 @@ const destroyImage = async (img) => {
     };
     let body = await request(options);
     return body == 'OK';
-}
+};
 
 const getWork = async (obj, args) => {
     let work = await model.Artwork.findOne({
