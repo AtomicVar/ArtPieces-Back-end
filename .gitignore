@@ -6,3 +6,5 @@ upload_server/files/
 *.png
 APPCODE.json
 .tern-project
+tsconfig.json
+api_server/ts_src/**/*
