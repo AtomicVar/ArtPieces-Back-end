@@ -12,15 +12,10 @@ fs.writeFileSync(
     JSON.stringify(crypto.randomBytes(20).toString('hex'))
 );
 console.log('APPCODE.json generated.');
+
 const APPCODE = require('../APPCODE.json');
 
-// Provide different download link in different modes
-let APIURL = '';
-if (process.env.NODE_ENV == 'test') {
-    APIURL = 'http://127.0.0.1:4001/';
-} else {
-    APIURL = 'https://artpieces.cn/img';
-}
+const APIURL = 'https://artpieces.cn/img';
 
 const uploadServer = http.createServer((req, res) => {
     // Upload a file

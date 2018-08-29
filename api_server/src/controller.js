@@ -1,18 +1,18 @@
 import * as model from './model';
-import uuidv4 from 'uuid/v4';
 import 'babel-polyfill';
 import path from 'path';
 import crypto from 'crypto';
 import request from 'request-promise-native';
 
+/*
+ * The APPCODE is a certification used then destroying images through
+ * the upload server.
+ */
 import APPCODE from '../../APPCODE.json';
 
-let compressedURL = '';
-if (process.env.NODE_ENV == 'test') {
-    compressedURL = 'http://127.0.0.1:4001/compressed';
-} else {
-    compressedURL = 'https://artpieces.cn/img/compressed';
-}
+const compressedURL = 'https://artpieces.cn/img/compressed';
+
+// Helper functions
 
 const passwordRight = async (email, password) => {
     let u = await model.User.findOne({
@@ -40,6 +40,8 @@ const destroyImage = async img => {
     let body = await request(options);
     return body == 'OK';
 };
+
+// APIs
 
 const getWork = async (obj, args) => {
     let work = await model.Artwork.findOne({
