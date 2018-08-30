@@ -97,6 +97,10 @@ const getUser = async (obj, args) => {
         attributes: ['email', 'name', 'portrait'],
         where: { email: args.email },
     });
+    if (!user) {
+        return null;
+    }
+
     user.artworks = await model.Artwork.findAll({
         attributes: [
             'id',
@@ -116,10 +120,15 @@ const getUser = async (obj, args) => {
             path.basename(w.keyPhoto)
         );
     });
-    user.compressedPortrait = path.join(
-        compressedURL,
-        path.basename(user.portrait)
-    );
+
+    // If the user has a portrait, provide a compressed version
+    if (user.portrait) {
+        user.compressedPortrait = path.join(
+            compressedURL,
+            path.basename(user.portrait)
+        );
+    }
+
     user.repos = await model.Repo.findAll({
         attributes: ['id', 'title', 'keyArtwork', 'starter', 'timestamp'],
         where: { starter: args.email },
