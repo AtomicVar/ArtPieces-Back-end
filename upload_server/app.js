@@ -18,6 +18,7 @@ const APPCODE = require('../APPCODE.json');
 const APIURL = 'https://artpieces.cn/img';
 
 const uploadServer = http.createServer((req, res) => {
+    console.log(req.url);
     // Upload a file
     if (req.url == '/upload' && req.method == 'POST') {
         let form = new formidable.IncomingForm();
