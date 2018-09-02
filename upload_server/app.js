@@ -26,7 +26,7 @@ const uploadServer = http.createServer((req, res) => {
 
         form.on('file', (name, file) => {
             console.log(`Uploading image ${name}.`);
-            if (file.type == 'image/png') {
+            if (file.type == 'image/jpg') {
                 // Use absolute path while saving files
                 // Use relative path while giving download URLs
                 let originalRelativePath = path.relative(__dirname, file.path);
@@ -53,7 +53,7 @@ const uploadServer = http.createServer((req, res) => {
                 msg.compressedURL = path.join(APIURL, compressedRelativePath);
             } else {
                 console.log('Bad file type.');
-                msg.error = 'PNG wanted!';
+                msg.error = '.jpg file wanted!';
             }
         });
 
