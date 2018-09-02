@@ -19,6 +19,7 @@ const User = database.define('user', {
     password: STRING,
     salt: STRING,
     portrait: STRING,
+    signature: STRING,
 });
 
 const Artwork = database.define('artwork', {

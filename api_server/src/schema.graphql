@@ -17,6 +17,7 @@ type User {
     name: String
     portrait: URL
     compressedPortrait: URL
+    signature: String
     artworks: [Artwork]
     repos: [Repo]
 }
@@ -220,6 +221,7 @@ type Mutation {
         name: String
         newPassword: String
         portrait: URL
+        signature: String
     ): Msg
 
     """

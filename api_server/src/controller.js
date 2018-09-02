@@ -176,6 +176,7 @@ const insertUser = async (obj, args) => {
             password: passwd,
             salt: salt,
             portrait: args.portrait,
+            signature: args.signature,
         });
         return {
             status: 0,
@@ -423,6 +424,7 @@ const updateUser = async (obj, args) => {
             name: args.name,
             password: args.newPassword,
             portrait: args.portrait,
+            signature: args.signature,
         },
         {
             where: {
