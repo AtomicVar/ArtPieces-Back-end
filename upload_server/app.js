@@ -49,8 +49,8 @@ const uploadServer = http.createServer((req, res) => {
 
                 // Construct the msg
                 msg.msg = `${name} uploaded`;
-                msg.url = APIURL + originalRelativePath;
-                msg.compressedURL = APIURL + compressedRelativePath;
+                msg.url = path.join(APIURL, originalRelativePath);
+                msg.compressedURL = path.join(APIURL, compressedRelativePath);
             } else {
                 console.log('Bad file type.');
                 msg.error = 'PNG wanted!';
