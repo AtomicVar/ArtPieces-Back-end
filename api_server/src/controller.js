@@ -680,7 +680,7 @@ const getFeed = async (obj, args) => {
             'keyPhoto',
         ],
         order: [['timestamp', 'DESC']],
-        limit: 10,
+        limit: 12,
         where: {
             timestamp: {
                 [Op.gt]: new Date(args.timestamp),
@@ -701,7 +701,7 @@ const extendFeed = async (obj, args) => {
             'keyPhoto',
         ],
         order: [['timestamp', 'DESC']],
-        limit: 10,
+        limit: 12,
         where: {
             timestamp: {
                 [Op.lt]: new Date(args.timestamp),
