@@ -32,6 +32,7 @@ const Artwork = database.define('artwork', {
     creator: STRING,
     timestamp: DATE,
     keyPhoto: STRING,
+    belongingRepo: UUID,
 });
 
 const Repo = database.define('repo', {
@@ -58,19 +59,24 @@ const Lecture = database.define('lecture', {
     timestamp: DATE,
 });
 
-const Fllw_Relation = database.define('fllw_relation', {
+const Fllw_User = database.define('fllw_relation', {
     user: STRING,
     follow: STRING,
 });
 
-const Star_Relation = database.define('star_relation', {
+const Fllw_Repo = database.define('fllw_relation', {
+    user: STRING,
+    follow: UUID,
+});
+
+const Star_Lecture = database.define('star_relation', {
     user: STRING,
     lecture: UUID,
 });
 
-const Repo_Childwork = database.define('repo_childwork', {
+const Star_Repo = database.define('star_relation', {
+    user: STRING,
     repo: UUID,
-    artwork: UUID,
 });
 
 export {
@@ -79,7 +85,8 @@ export {
     Artwork,
     Lecture,
     Repo,
-    Fllw_Relation,
-    Star_Relation,
-    Repo_Childwork,
+    Fllw_User,
+    Fllw_Repo,
+    Star_Lecture,
+    Star_Repo,
 };

@@ -40,6 +40,8 @@ type Repo {
     starter: User
     timestamp: Datetime
     artworks: [Artwork]
+    numberOfStars: Int
+    numberOfArtworks: Int
 }
 
 type Lecture {
@@ -299,10 +301,21 @@ type Mutation {
 
     **Status-0 Payload:** The new number of stars of the lecture.
     """
-    star(
+    starLect(
         user: String!
         password: String!
         lecture: UUID!
+    ): Msg
+
+    """
+    **Function:** Star a repo.
+
+    **Status-0 Payload:** The new number of stars of the repo.
+    """
+    starRepo(
+        user: String!
+        password: String!
+        repo: UUID!
     ): Msg
 
     """
@@ -321,9 +334,20 @@ type Mutation {
 
     **Status-0 Payload:** The new number of stars of the lecture.
     """
-    unstar(
+    unstarLect(
         user: String!
         password: String!
         lecture: UUID!
+    ): Msg
+
+    """
+    **Function:** Unstar a repo.
+
+    **Status-0 Payload:** The new number of stars of the repo.
+    """
+    unstarRepo(
+        user: String!
+        password: String!
+        repo: UUID!
     ): Msg
 }

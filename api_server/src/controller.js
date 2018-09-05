@@ -141,6 +141,13 @@ const getRepo = async (obj, args) => {
         attributes: ['id', 'title', 'keyArtwork', 'starter', 'timestamp'],
         where: { id: args.id },
     });
+    let artworks = await model.Artwork.findAll({
+        attributes: ['id', 'title', 'description', 'creator', 'timestamp', 'keyPhoto'],
+        where: {belongingRepo: args.id}
+    });
+
+    repo.artworks = artworks;
+    repo.numberOfArtworks = artworks.length;
     return repo;
 };
 
@@ -157,7 +164,7 @@ const getLecture = async (obj, args) => {
         where: { id: args.id },
     });
     lect.numberOfSteps = lect.steps.length;
-    lect.numberOfStars = await model.Star_Relation.count({
+    lect.numberOfStars = await model.Star_Lecture.count({
         where: { lecture: args.id },
     });
     return lect;
@@ -213,10 +220,7 @@ const insertWork = async (obj, args) => {
             keyPhoto: args.keyPhoto,
             creator: args.creator,
             timestamp: args.timestamp,
-        });
-        await model.Repo_Childwork.create({
-            repo: args.belongingRepo,
-            artwork: work.id,
+            belongingRepo: args.belongingRepo,
         });
         return {
             status: 0,
@@ -337,11 +341,6 @@ const removeWork = async (obj, args) => {
             id: args.id,
         },
     });
-    await model.Repo_Childwork.destroy({
-        where: {
-            artwork: args.id,
-        },
-    });
     return {
         status: 0,
         payload: 'OK.',
@@ -402,7 +401,7 @@ const removeLect = async (obj, args) => {
             id: args.id,
         },
     });
-    await model.Star_Relation.destroy({
+    await model.Star_Lecture.destroy({
         where: {
             lecture: args.id,
         },
@@ -476,8 +475,8 @@ const updateWork = async (obj, args) => {
         {
             title: args.title,
             description: args.description,
-            pictureURL: args.keyPhoto,
-            user: args.creator,
+            keyPhoto: args.keyPhoto,
+            creator: args.creator,
         },
         {
             where: {
@@ -583,11 +582,11 @@ const follow = async (obj, args) => {
         };
     }
 
-    await model.Fllw_Relation.create({
+    await model.Fllw_User.create({
         user: args.origin,
         follow: args.target,
     });
-    let count = model.Fllw_Relation.count({
+    let count = model.Fllw_User.count({
         where: {
             follow: args.target,
         },
@@ -606,13 +605,13 @@ const unfollow = async (obj, args) => {
         };
     }
 
-    await model.Fllw_Relation.destroy({
+    await model.Fllw_User.destroy({
         where: {
             user: args.origin,
             follow: args.target,
         },
     });
-    let count = model.Fllw_Relation.count({
+    let count = model.Fllw_User.count({
         where: {
             follow: args.target,
         },
@@ -623,7 +622,7 @@ const unfollow = async (obj, args) => {
     };
 };
 
-const star = async (obj, args) => {
+const starLect = async (obj, args) => {
     if (!(await passwordRight(args.user, args.password))) {
         return {
             status: -1,
@@ -631,11 +630,11 @@ const star = async (obj, args) => {
         };
     }
 
-    await model.Star_Relation.create({
+    await model.Star_Lecture.create({
         user: args.user,
         lecture: args.lecture,
     });
-    let count = model.Star_Relation.count({
+    let count = model.Star_Lecture.count({
         where: {
             lecture: args.lecture,
         },
@@ -646,7 +645,7 @@ const star = async (obj, args) => {
     };
 };
 
-const unstar = async (obj, args) => {
+const unstarLect = async (obj, args) => {
     if (!(await passwordRight(args.user, args.password))) {
         return {
             status: -1,
@@ -654,13 +653,13 @@ const unstar = async (obj, args) => {
         };
     }
 
-    await model.Star_Relation.destroy({
+    await model.Star_Lecture.destroy({
         where: {
             user: args.user,
             lecture: args.lecture,
         },
     });
-    let count = model.Star_Relation.count({
+    let count = model.Star_Lecture.count({
         where: {
             lecture: args.lecture,
         },
@@ -671,6 +670,53 @@ const unstar = async (obj, args) => {
     };
 };
 
+const starRepo = async (obj, args) => {
+    if (!(await passwordRight(args.user, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
+    await model.Star_Repo.create({
+        user: args.user,
+        repo: args.repo,
+    });
+    let count = model.Star_Repo.count({
+        where: {
+            repo: args.repo,
+        },
+    });
+    return {
+        status: 0,
+        payload: count,
+    };
+};
+
+const unstarRepo = async (obj, args) => {
+    if (!(await passwordRight(args.user, args.password))) {
+        return {
+            status: -1,
+            payload: 'Access Denied: wrong password.',
+        };
+    }
+
+    await model.Star_Repo.destroy({
+        where: {
+            user: args.user,
+            repo: args.repo,
+        },
+    });
+    let count = model.Star_Repo.count({
+        where: {
+            repo: args.repo,
+        },
+    });
+    return {
+        status: 0,
+        payload: count,
+    };
+};
 const getRepoFeed = async (obj, args) => {
     let repos = model.Repo.findAll({
         attributes: [
@@ -774,8 +820,8 @@ export {
     removeLect,
     follow,
     unfollow,
-    star,
-    unstar,
+    starLect,
+    unstarLect,
     getRepoFeed,
     extendRepoFeed,
     getLectFeed,
