@@ -81,6 +81,7 @@ const getWork = async (obj, args) => {
             'description',
             'creator',
             'timestamp',
+            'belongingRepo',
             'keyPhoto',
         ],
         where: { id: args.id },
@@ -586,7 +587,7 @@ const follow = async (obj, args) => {
         user: args.origin,
         follow: args.target,
     });
-    let count = model.Fllw_User.count({
+    let count = await model.Fllw_User.count({
         where: {
             follow: args.target,
         },
@@ -611,7 +612,7 @@ const unfollow = async (obj, args) => {
             follow: args.target,
         },
     });
-    let count = model.Fllw_User.count({
+    let count = await model.Fllw_User.count({
         where: {
             follow: args.target,
         },
@@ -634,7 +635,7 @@ const starLect = async (obj, args) => {
         user: args.user,
         lecture: args.lecture,
     });
-    let count = model.Star_Lecture.count({
+    let count = await model.Star_Lecture.count({
         where: {
             lecture: args.lecture,
         },
@@ -659,7 +660,7 @@ const unstarLect = async (obj, args) => {
             lecture: args.lecture,
         },
     });
-    let count = model.Star_Lecture.count({
+    let count = await model.Star_Lecture.count({
         where: {
             lecture: args.lecture,
         },
@@ -682,7 +683,7 @@ const starRepo = async (obj, args) => {
         user: args.user,
         repo: args.repo,
     });
-    let count = model.Star_Repo.count({
+    let count = await model.Star_Repo.count({
         where: {
             repo: args.repo,
         },
@@ -707,7 +708,7 @@ const unstarRepo = async (obj, args) => {
             repo: args.repo,
         },
     });
-    let count = model.Star_Repo.count({
+    let count = await model.Star_Repo.count({
         where: {
             repo: args.repo,
         },
@@ -718,14 +719,14 @@ const unstarRepo = async (obj, args) => {
     };
 };
 const getRepoFeed = async (obj, args) => {
-    let repos = model.Repo.findAll({
+    let repos = await model.Repo.findAll({
         attributes: [
             'id',
             'title',
             'description',
             'starter',
             'timestamp',
-            'keyPhoto',
+            'keyArtwork',
         ],
         order: [['timestamp', 'DESC']],
         limit: 12,
@@ -735,18 +736,35 @@ const getRepoFeed = async (obj, args) => {
             },
         },
     });
+
+    for (let i in repos) {
+        let work = await model.Artwork.findOne({
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'creator',
+            'timestamp',
+            'belongingRepo',
+            'keyPhoto',
+        ],
+            where: {belongingRepo: repos[i].id},
+        });
+        repos[i].keyArtwork = work;
+    }
+
     return repos;
 };
 
 const extendRepoFeed = async (obj, args) => {
-    let repos = model.Repo.findAll({
+    let repos = await model.Repo.findAll({
         attributes: [
             'id',
             'title',
             'description',
             'starter',
             'timestamp',
-            'keyPhoto',
+            'keyArtwork',
         ],
         order: [['timestamp', 'DESC']],
         limit: 12,
@@ -756,11 +774,28 @@ const extendRepoFeed = async (obj, args) => {
             },
         },
     });
+
+    for (let i in repos) {
+        let work = await model.Artwork.findOne({
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'creator',
+            'timestamp',
+            'belongingRepo',
+            'keyPhoto',
+        ],
+            where: {belongingRepo: repos[i].id},
+        });
+        repos[i].keyArtwork = work;
+    }
+
     return repos;
 };
 
 const getLectFeed = async (obj, args) => {
-    let lectures = model.Lecture.findAll({
+    let lectures = await model.Lecture.findAll({
         attributes: [
             'id',
             'title',
@@ -781,7 +816,7 @@ const getLectFeed = async (obj, args) => {
 };
 
 const extendLectFeed = async (obj, args) => {
-    let lectures = model.Lecture.findAll({
+    let lectures = await model.Lecture.findAll({
         attributes: [
             'id',
             'title',
