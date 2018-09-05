@@ -86,6 +86,10 @@ const getWork = async (obj, args) => {
         ],
         where: { id: args.id },
     });
+
+    if (!work)
+        return null;
+
     work.compressKeyPhoto = path.join(
         compressedURL,
         path.basename(work.keyPhoto)
@@ -147,6 +151,9 @@ const getRepo = async (obj, args) => {
         where: {belongingRepo: args.id}
     });
 
+    if (!repo)
+        return null;
+
     repo.artworks = artworks;
     repo.numberOfArtworks = artworks.length;
     return repo;
@@ -164,6 +171,10 @@ const getLecture = async (obj, args) => {
         ],
         where: { id: args.id },
     });
+
+    if (!lect)
+        return null;
+
     lect.numberOfSteps = lect.steps.length;
     lect.numberOfStars = await model.Star_Lecture.count({
         where: { lecture: args.id },
