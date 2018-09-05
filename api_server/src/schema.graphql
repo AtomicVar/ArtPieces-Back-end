@@ -126,7 +126,7 @@ type Query {
 
     **Return:** a list of `Lecture`.
     """
-    getLectFeed(user: Email, timestamp: Datetime!): [Lect]
+    getLectFeed(user: Email, timestamp: Datetime!): [Lecture]
 
     """
     **Function:** Extend an information lecture feed list.
@@ -135,7 +135,7 @@ type Query {
 
     **Return:** a list of `Lect`.
     """
-    extendLectFeed(user: Email, timestamp: Datetime!): [Lect]
+    extendLectFeed(user: Email, timestamp: Datetime!): [Lecture]
 }
 
 type Mutation {

@@ -822,6 +822,8 @@ export {
     unfollow,
     starLect,
     unstarLect,
+    starRepo,
+    unstarRepo,
     getRepoFeed,
     extendRepoFeed,
     getLectFeed,

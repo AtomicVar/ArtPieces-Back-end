@@ -36,8 +36,10 @@ const resolvers = {
         updateRepo: controller.updateRepo,
         updateLect: controller.updateLect,
 
-        star: controller.star,
-        unstar: controller.unstar,
+        starLect: controller.starLect,
+        starRepo: controller.starRepo,
+        unstarLect: controller.unstarLect,
+        unstarRepo: controller.unstarRepo,
         follow: controller.follow,
         unfollow: controller.unfollow,
     },
