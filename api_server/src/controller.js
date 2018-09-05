@@ -671,8 +671,50 @@ const unstar = async (obj, args) => {
     };
 };
 
-const getFeed = async (obj, args) => {
-    let works = model.Artwork.findAll({
+const getRepoFeed = async (obj, args) => {
+    let repos = model.Repo.findAll({
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'starter',
+            'timestamp',
+            'keyPhoto',
+        ],
+        order: [['timestamp', 'DESC']],
+        limit: 12,
+        where: {
+            timestamp: {
+                [Op.gt]: new Date(args.timestamp),
+            },
+        },
+    });
+    return repos;
+};
+
+const extendRepoFeed = async (obj, args) => {
+    let repos = model.Repo.findAll({
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'starter',
+            'timestamp',
+            'keyPhoto',
+        ],
+        order: [['timestamp', 'DESC']],
+        limit: 12,
+        where: {
+            timestamp: {
+                [Op.lt]: new Date(args.timestamp),
+            },
+        },
+    });
+    return repos;
+};
+
+const getLectFeed = async (obj, args) => {
+    let lectures = model.Lecture.findAll({
         attributes: [
             'id',
             'title',
@@ -689,11 +731,11 @@ const getFeed = async (obj, args) => {
             },
         },
     });
-    return works;
+    return lectures;
 };
 
-const extendFeed = async (obj, args) => {
-    let works = model.Artwork.findAll({
+const extendLectFeed = async (obj, args) => {
+    let lectures = model.Lecture.findAll({
         attributes: [
             'id',
             'title',
@@ -710,7 +752,7 @@ const extendFeed = async (obj, args) => {
             },
         },
     });
-    return works;
+    return lectures;
 };
 
 export {
@@ -734,6 +776,8 @@ export {
     unfollow,
     star,
     unstar,
-    getFeed,
-    extendFeed,
+    getRepoFeed,
+    extendRepoFeed,
+    getLectFeed,
+    extendLectFeed,
 };

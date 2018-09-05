@@ -100,22 +100,40 @@ type Query {
     getLecture(id: UUID!): Lecture
 
     """
-    **Function:** Get a new artworks information feed list.
+    **Function:** Get a new repos information feed list.
 
-    **Explaination:** The `timestamp` is the timestamp of the first artwork in your last feed list.
+    **Explaination:** The `timestamp` is the timestamp of the first repo in your last feed list.
 
-    **Return:** a list of `Artwork`.
+    **Return:** a list of `Repo`.
     """
-    getFeed(user: Email!, timestamp: Datetime!): [Artwork]
+    getRepoFeed(user: Email, timestamp: Datetime!): [Repo]
 
     """
-    **Function:** Extend an information feed list.
+    **Function:** Extend an information repo feed list.
 
-    **Explaination:** The `timestamp` is the timestamp of the last artwork in your last feed list.
+    **Explaination:** The `timestamp` is the timestamp of the last repo in your last feed list.
 
-    **Return:** a list of `Artwork`.
+    **Return:** a list of `Repo`.
     """
-    extendFeed(user: Email!, timestamp: Datetime!): [Artwork]
+    extendRepoFeed(user: Email, timestamp: Datetime!): [Repo]
+
+    """
+    **Function:** Get a new lectures information feed list.
+
+    **Explaination:** The `timestamp` is the timestamp of the first lecture in your last feed list.
+
+    **Return:** a list of `Lecture`.
+    """
+    getLectFeed(user: Email, timestamp: Datetime!): [Lect]
+
+    """
+    **Function:** Extend an information lecture feed list.
+
+    **Explaination:** The `timestamp` is the timestamp of the last lecture in your last feed list.
+
+    **Return:** a list of `Lect`.
+    """
+    extendLectFeed(user: Email, timestamp: Datetime!): [Lect]
 }
 
 type Mutation {
