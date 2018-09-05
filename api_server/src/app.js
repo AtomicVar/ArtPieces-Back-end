@@ -15,8 +15,10 @@ const resolvers = {
         getUser: controller.getUser,
         getRepo: controller.getRepo,
         getLecture: controller.getLecture,
-        getFeed: controller.getFeed,
-        extendFeed: controller.extendFeed,
+        getRepoFeed: controller.getRepoFeed,
+        extendRepoFeed: controller.extendRepoFeed,
+        getLectFeed: controller.getLectFeed,
+        extendLectFeed: controller.extendLectFeed,
     },
 
     Mutation: {
