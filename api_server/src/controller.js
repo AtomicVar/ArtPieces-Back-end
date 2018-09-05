@@ -251,6 +251,8 @@ const insertRepo = async (obj, args) => {
             title: args.title,
             keyArtwork: args.keyArtwork,
             starter: args.starter,
+            description: args.description,
+            timestamp: new Date(args.timestamp),
         });
         return {
             status: 0,
