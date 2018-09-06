@@ -20,6 +20,7 @@ type User {
     signature: String
     artworks: [Artwork]
     repos: [Repo]
+    lectures: [Lecture]
 }
 
 type Artwork {

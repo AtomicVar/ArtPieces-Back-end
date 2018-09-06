@@ -87,10 +87,9 @@ const getWork = async (obj, args) => {
         where: { id: args.id },
     });
 
-    if (!work)
-        return null;
+    if (!work) return null;
 
-    work.compressKeyPhoto = path.join(
+    work.compressedKeyPhoto = path.join(
         compressedURL,
         path.basename(work.keyPhoto)
     );
@@ -106,6 +105,7 @@ const getUser = async (obj, args) => {
         return null;
     }
 
+    // artworks
     user.artworks = await model.Artwork.findAll({
         attributes: [
             'id',
@@ -120,7 +120,7 @@ const getUser = async (obj, args) => {
 
     // Add compressed URL for the portrait and keyPhotos
     user.artworks.forEach(w => {
-        w.compressKeyPhoto = path.join(
+        w.compressedKeyPhoto = path.join(
             compressedURL,
             path.basename(w.keyPhoto)
         );
@@ -134,10 +134,62 @@ const getUser = async (obj, args) => {
         );
     }
 
+    // repos
     user.repos = await model.Repo.findAll({
         attributes: ['id', 'title', 'keyArtwork', 'starter', 'timestamp'],
         where: { starter: args.email },
     });
+
+    // complete repos
+    for (let i in user.repos) {
+        let artwork = await model.Artwork.findOne({
+            attributes: [
+                'id',
+                'title',
+                'description',
+                'creator',
+                'timestamp',
+                'keyPhoto',
+            ],
+            where: { id: user.repos[i].keyArtwork },
+        });
+        if (artwork.keyPhoto) {
+            artwork.compressedKeyPhoto = path.join(
+                compressedURL,
+                path.basename(artwork.keyPhoto)
+            );
+        }
+        user.repos[i].keyArtwork = artwork;
+
+        user.repos[i].numberOfArtworks = await model.Artwork.count({
+            where: {belongingRepo: user.repos[i].id},
+        });
+        user.repos[i].numberOfStars = await model.Star_Repo.count({
+            where: {repo: user.repos[i].id},
+        });
+    }
+
+    // lectures
+    user.lectures = await model.Lecture.findAll({
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'steps',
+            'creator',
+            'timestamp',
+        ],
+        where: { creator: args.email },
+    });
+
+    // complete lectures
+    for (let i in user.lectures) {
+        user.lectures[i].numberOfStars = await model.Star_Lecture.count({
+            where: {lecture: user.lectures[i].id},
+        });
+        user.lectures[i].numberOfSteps = user.lectures[i].steps.length;
+    }
+
     return user;
 };
 
@@ -147,12 +199,18 @@ const getRepo = async (obj, args) => {
         where: { id: args.id },
     });
     let artworks = await model.Artwork.findAll({
-        attributes: ['id', 'title', 'description', 'creator', 'timestamp', 'keyPhoto'],
-        where: {belongingRepo: args.id}
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'creator',
+            'timestamp',
+            'keyPhoto',
+        ],
+        where: { belongingRepo: args.id },
     });
 
-    if (!repo)
-        return null;
+    if (!repo) return null;
 
     repo.artworks = artworks;
     repo.numberOfArtworks = artworks.length;
@@ -172,8 +230,7 @@ const getLecture = async (obj, args) => {
         where: { id: args.id },
     });
 
-    if (!lect)
-        return null;
+    if (!lect) return null;
 
     lect.numberOfSteps = lect.steps.length;
     lect.numberOfStars = await model.Star_Lecture.count({
@@ -750,16 +807,16 @@ const getRepoFeed = async (obj, args) => {
 
     for (let i in repos) {
         let work = await model.Artwork.findOne({
-        attributes: [
-            'id',
-            'title',
-            'description',
-            'creator',
-            'timestamp',
-            'belongingRepo',
-            'keyPhoto',
-        ],
-            where: {belongingRepo: repos[i].id},
+            attributes: [
+                'id',
+                'title',
+                'description',
+                'creator',
+                'timestamp',
+                'belongingRepo',
+                'keyPhoto',
+            ],
+            where: { belongingRepo: repos[i].id },
         });
         repos[i].keyArtwork = work;
     }
@@ -788,16 +845,16 @@ const extendRepoFeed = async (obj, args) => {
 
     for (let i in repos) {
         let work = await model.Artwork.findOne({
-        attributes: [
-            'id',
-            'title',
-            'description',
-            'creator',
-            'timestamp',
-            'belongingRepo',
-            'keyPhoto',
-        ],
-            where: {belongingRepo: repos[i].id},
+            attributes: [
+                'id',
+                'title',
+                'description',
+                'creator',
+                'timestamp',
+                'belongingRepo',
+                'keyPhoto',
+            ],
+            where: { belongingRepo: repos[i].id },
         });
         repos[i].keyArtwork = work;
     }

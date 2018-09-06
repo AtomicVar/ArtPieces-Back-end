@@ -59,22 +59,17 @@ const Lecture = database.define('lecture', {
     timestamp: DATE,
 });
 
-const Fllw_User = database.define('fllw_relation', {
+const Fllw_User = database.define('fllw_user', {
     user: STRING,
     follow: STRING,
 });
 
-const Fllw_Repo = database.define('fllw_relation', {
-    user: STRING,
-    follow: UUID,
-});
-
-const Star_Lecture = database.define('star_relation', {
+const Star_Lecture = database.define('star_lecture', {
     user: STRING,
     lecture: UUID,
 });
 
-const Star_Repo = database.define('star_relation', {
+const Star_Repo = database.define('star_lecture', {
     user: STRING,
     repo: UUID,
 });
@@ -86,7 +81,6 @@ export {
     Lecture,
     Repo,
     Fllw_User,
-    Fllw_Repo,
     Star_Lecture,
     Star_Repo,
 };
