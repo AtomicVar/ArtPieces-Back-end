@@ -816,8 +816,12 @@ const getRepoFeed = async (obj, args) => {
                 'belongingRepo',
                 'keyPhoto',
             ],
-            where: { belongingRepo: repos[i].id },
+            where: { id: repos[i].keyArtwork },
         });
+        work.compressedKeyPhoto = path.join(
+            compressedURL,
+            path.basename(work.keyPhoto)
+        );
         repos[i].keyArtwork = work;
     }
 
