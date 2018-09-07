@@ -798,7 +798,7 @@ const getRepoFeed = async (obj, args) => {
             'keyArtwork',
         ],
         order: [['timestamp', 'DESC']],
-        limit: 12,
+        limit: 6,
         where: {
             timestamp: {
                 [Op.gt]: new Date(args.timestamp),
@@ -861,7 +861,7 @@ const extendRepoFeed = async (obj, args) => {
             'keyArtwork',
         ],
         order: [['timestamp', 'DESC']],
-        limit: 12,
+        limit: 6,
         where: {
             timestamp: {
                 [Op.lt]: new Date(args.timestamp),
@@ -924,7 +924,7 @@ const getLectFeed = async (obj, args) => {
             'keyPhoto',
         ],
         order: [['timestamp', 'DESC']],
-        limit: 12,
+        limit: 6,
         where: {
             timestamp: {
                 [Op.gt]: new Date(args.timestamp),
@@ -983,7 +983,7 @@ const extendLectFeed = async (obj, args) => {
             'keyPhoto',
         ],
         order: [['timestamp', 'DESC']],
-        limit: 12,
+        limit: 6,
         where: {
             timestamp: {
                 [Op.lt]: new Date(args.timestamp),
