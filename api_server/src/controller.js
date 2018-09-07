@@ -805,6 +805,7 @@ const getRepoFeed = async (obj, args) => {
         },
     });
 
+    // Build up keyArtwork & starter
     for (let i in repos) {
         let work = await model.Artwork.findOne({
             attributes: [
@@ -823,6 +824,12 @@ const getRepoFeed = async (obj, args) => {
             path.basename(work.keyPhoto)
         );
         repos[i].keyArtwork = work;
+
+        let user = await model.User.findOne({
+            attributes: ['email', 'name', 'portrait'],
+            where: { email: repos[i].starter },
+        });
+        repos[i].starter = user;
     }
 
     return repos;
@@ -847,6 +854,7 @@ const extendRepoFeed = async (obj, args) => {
         },
     });
 
+    // Build up keyArtwork & starter
     for (let i in repos) {
         let work = await model.Artwork.findOne({
             attributes: [
@@ -858,9 +866,19 @@ const extendRepoFeed = async (obj, args) => {
                 'belongingRepo',
                 'keyPhoto',
             ],
-            where: { belongingRepo: repos[i].id },
+            where: { id: repos[i].keyArtwork },
         });
+        work.compressedKeyPhoto = path.join(
+            compressedURL,
+            path.basename(work.keyPhoto)
+        );
         repos[i].keyArtwork = work;
+
+        let user = await model.User.findOne({
+            attributes: ['email', 'name', 'portrait'],
+            where: { email: repos[i].starter },
+        });
+        repos[i].starter = user;
     }
 
     return repos;
@@ -884,6 +902,34 @@ const getLectFeed = async (obj, args) => {
             },
         },
     });
+
+    // Build up keyArtwork & creator
+    for (let i in lectures) {
+        let work = await model.Artwork.findOne({
+            attributes: [
+                'id',
+                'title',
+                'description',
+                'creator',
+                'timestamp',
+                'belongingRepo',
+                'keyPhoto',
+            ],
+            where: { id: lectures[i].keyArtwork },
+        });
+        work.compressedKeyPhoto = path.join(
+            compressedURL,
+            path.basename(work.keyPhoto)
+        );
+        lectures[i].keyArtwork = work;
+
+        let user = await model.User.findOne({
+            attributes: ['email', 'name', 'portrait'],
+            where: { email: lectures[i].starter },
+        });
+        lectures[i].creator = user;
+    }
+
     return lectures;
 };
 
@@ -905,6 +951,34 @@ const extendLectFeed = async (obj, args) => {
             },
         },
     });
+    
+    // Build up keyArtwork & creator
+    for (let i in lectures) {
+        let work = await model.Artwork.findOne({
+            attributes: [
+                'id',
+                'title',
+                'description',
+                'creator',
+                'timestamp',
+                'belongingRepo',
+                'keyPhoto',
+            ],
+            where: { id: lectures[i].keyArtwork },
+        });
+        work.compressedKeyPhoto = path.join(
+            compressedURL,
+            path.basename(work.keyPhoto)
+        );
+        lectures[i].keyArtwork = work;
+
+        let user = await model.User.findOne({
+            attributes: ['email', 'name', 'portrait'],
+            where: { email: lectures[i].starter },
+        });
+        lectures[i].creator = user;
+    }
+
     return lectures;
 };
 
