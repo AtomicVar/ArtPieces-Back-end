@@ -162,10 +162,10 @@ const getUser = async (obj, args) => {
         user.repos[i].keyArtwork = artwork;
 
         user.repos[i].numberOfArtworks = await model.Artwork.count({
-            where: {belongingRepo: user.repos[i].id},
+            where: { belongingRepo: user.repos[i].id },
         });
         user.repos[i].numberOfStars = await model.Star_Repo.count({
-            where: {repo: user.repos[i].id},
+            where: { repo: user.repos[i].id },
         });
     }
 
@@ -185,7 +185,7 @@ const getUser = async (obj, args) => {
     // complete lectures
     for (let i in user.lectures) {
         user.lectures[i].numberOfStars = await model.Star_Lecture.count({
-            where: {lecture: user.lectures[i].id},
+            where: { lecture: user.lectures[i].id },
         });
         user.lectures[i].numberOfSteps = user.lectures[i].steps.length;
     }
@@ -786,6 +786,7 @@ const unstarRepo = async (obj, args) => {
         payload: count,
     };
 };
+
 const getRepoFeed = async (obj, args) => {
     let repos = await model.Repo.findAll({
         attributes: [
@@ -825,10 +826,24 @@ const getRepoFeed = async (obj, args) => {
         );
         repos[i].keyArtwork = work;
 
+        repos[i].numberOfArtworks = await model.Artwork.count({
+            where: { belongingRepo: repos[i].id },
+        });
+
+        repos[i].numberOfStars = await model.Star_Repo.count({
+            where: { repo: repos[i].id },
+        });
+
         let user = await model.User.findOne({
             attributes: ['email', 'name', 'portrait'],
             where: { email: repos[i].starter },
         });
+        if (user.portrait) {
+            user.compressedPortrait = path.join(
+                compressedURL,
+                path.basename(user.portrait)
+            );
+        }
         repos[i].starter = user;
     }
 
@@ -874,10 +889,24 @@ const extendRepoFeed = async (obj, args) => {
         );
         repos[i].keyArtwork = work;
 
+        repos[i].numberOfArtworks = await model.Artwork.count({
+            where: { belongingRepo: repos[i].id },
+        });
+
+        repos[i].numberOfStars = await model.Star_Repo.count({
+            where: { repo: repos[i].id },
+        });
+
         let user = await model.User.findOne({
             attributes: ['email', 'name', 'portrait'],
             where: { email: repos[i].starter },
         });
+        if (user.portrait) {
+            user.compressedPortrait = path.join(
+                compressedURL,
+                path.basename(user.portrait)
+            );
+        }
         repos[i].starter = user;
     }
 
@@ -923,10 +952,20 @@ const getLectFeed = async (obj, args) => {
         );
         lectures[i].keyArtwork = work;
 
+        lectures[i].numberOfStars = await model.Star_Lecture.count({
+            where: { lecture: lectures[i].id },
+        });
+
         let user = await model.User.findOne({
             attributes: ['email', 'name', 'portrait'],
             where: { email: lectures[i].starter },
         });
+        if (user.portrait) {
+            user.compressedPortrait = path.join(
+                compressedURL,
+                path.basename(user.portrait)
+            );
+        }
         lectures[i].creator = user;
     }
 
@@ -951,7 +990,7 @@ const extendLectFeed = async (obj, args) => {
             },
         },
     });
-    
+
     // Build up keyArtwork & creator
     for (let i in lectures) {
         let work = await model.Artwork.findOne({
@@ -972,10 +1011,20 @@ const extendLectFeed = async (obj, args) => {
         );
         lectures[i].keyArtwork = work;
 
+        lectures[i].numberOfStars = await model.Star_Lecture.count({
+            where: { lecture: lectures[i].id },
+        });
+
         let user = await model.User.findOne({
             attributes: ['email', 'name', 'portrait'],
             where: { email: lectures[i].starter },
         });
+        if (user.portrait) {
+            user.compressedPortrait = path.join(
+                compressedURL,
+                path.basename(user.portrait)
+            );
+        }
         lectures[i].creator = user;
     }
 
