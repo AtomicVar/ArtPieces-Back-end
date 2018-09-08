@@ -161,6 +161,27 @@ const getUser = async (obj, args) => {
         }
         user.repos[i].keyArtwork = artwork;
 
+        user.repos[i].artworks = await model.Artwork.findAll({
+            attributes: [
+                'id',
+                'title',
+                'description',
+                'creator',
+                'timestamp',
+                'keyPhoto',
+            ],
+            where: { belongingRepo: user.repos[i].id },
+        });
+        for (let j in user.repos[i].artworks) {
+            if (user.repos[i].artworks[j].keyPhoto) {
+                user.repos[i].artworks[j].compressedKeyPhoto = path.join(
+                    compressedURL,
+                    path.basename(artwork.keyPhoto)
+                );
+            }
+        }
+        user.repos[i].artworks.push(user.repos[i].keyArtwork);
+
         user.repos[i].numberOfArtworks = await model.Artwork.count({
             where: { belongingRepo: user.repos[i].id },
         });
