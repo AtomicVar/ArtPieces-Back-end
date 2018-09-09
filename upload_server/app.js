@@ -1,5 +1,5 @@
 const formidable = require('formidable');
-const sharp = require('sharp');
+const images = require('images');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
@@ -26,7 +26,7 @@ const uploadServer = http.createServer((req, res) => {
 
         form.on('file', (name, file) => {
             console.log(`Uploading image ${name}.`);
-            if (file.type == 'image/jpg') {
+            if (file.type == 'image/jpg' || file.type == 'image/jpeg') {
                 // Use absolute path while saving files
                 // Use relative path while giving download URLs
                 let originalRelativePath = path.relative(__dirname, file.path);
@@ -39,13 +39,12 @@ const uploadServer = http.createServer((req, res) => {
                     'compressed',
                     path.basename(file.path)
                 );
+                
+                // 获取图片尺寸
+                let img = images(file.path);
+
                 // Save a compressed copy
-                fs.readFile(file.path, (err, data) => {
-                    if (err) throw err;
-                    sharp(data)
-                        .resize(400, 300)
-                        .toFile(compressedAbsolutePath);
-                });
+                img.resize(400).save(compressedAbsolutePath);
 
                 // Construct the msg
                 msg.msg = `${name} uploaded`;
@@ -53,7 +52,7 @@ const uploadServer = http.createServer((req, res) => {
                 msg.compressedURL = path.join(APIURL, compressedRelativePath);
             } else {
                 console.log('Bad file type.');
-                msg.error = '.jpg file wanted!';
+                msg.error = '.jpg/.jpeg file wanted!';
             }
         });
 
@@ -76,6 +75,25 @@ const uploadServer = http.createServer((req, res) => {
         form.uploadDir = path.join(__dirname, 'original');
         form.keepExtensions = true;
         form.parse(req);
+    }
+
+    // 查询图片元信息（长宽）
+    else if (req.url == '/query' && req.method == 'POST') {
+        let req_string = '';
+        req.on('data', (chunk) => {
+            req_string += chunk;
+        });
+
+        req.on('end', () => {
+            let req_json = JSON.parse(req_string);
+            let img = images(path.join(__dirname, 'original', path.basename(req_json.url)));
+            let res_json = {
+                width: img.width(),
+                heigth: img.height(),
+            };
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(res_json));
+        });
     }
 
     // Download a original file
@@ -166,6 +184,6 @@ const uploadServer = http.createServer((req, res) => {
     }
 });
 
-uploadServer.listen(4001, '0.0.0.0', 'localhost', () => {
+uploadServer.listen(4001, '0.0.0.0', () => {
     console.log('Upload server started...');
 });
