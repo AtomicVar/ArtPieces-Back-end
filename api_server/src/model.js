@@ -69,7 +69,7 @@ const Star_Lecture = database.define('star_lecture', {
     lecture: UUID,
 });
 
-const Star_Repo = database.define('star_lecture', {
+const Star_Repo = database.define('star_repo', {
     user: STRING,
     repo: UUID,
 });
