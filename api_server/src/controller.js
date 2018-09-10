@@ -651,6 +651,7 @@ const updateLect = async (obj, args) => {
             title: args.title,
             description: args.description,
             steps: args.steps,
+            keyPhoto: args.keyPhoto,
         },
         {
             where: {

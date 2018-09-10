@@ -194,6 +194,7 @@ type Mutation {
         title: String!
         description: String
         steps: JSON
+        keyPhoto: URL
         creator: String!
         password: String!
         timestamp: Datetime!
@@ -285,6 +286,7 @@ type Mutation {
         title: String
         description: String
         steps: JSON
+        keyPhoto: URL
     ): Msg
 
     """
