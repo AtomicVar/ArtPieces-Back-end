@@ -968,24 +968,6 @@ const getLectFeed = async (obj, args) => {
 
     // Build up keyArtwork & creator
     for (let i in lectures) {
-        let work = await model.Artwork.findOne({
-            attributes: [
-                'id',
-                'title',
-                'description',
-                'creator',
-                'timestamp',
-                'belongingRepo',
-                'keyPhoto',
-            ],
-            where: { id: lectures[i].keyArtwork },
-        });
-        work.compressedKeyPhoto = path.join(
-            compressedURL,
-            path.basename(work.keyPhoto)
-        );
-        lectures[i].keyArtwork = work;
-
         lectures[i].numberOfStars = await model.Star_Lecture.count({
             where: { lecture: lectures[i].id },
         });
@@ -1033,24 +1015,6 @@ const extendLectFeed = async (obj, args) => {
 
     // Build up keyArtwork & creator
     for (let i in lectures) {
-        let work = await model.Artwork.findOne({
-            attributes: [
-                'id',
-                'title',
-                'description',
-                'creator',
-                'timestamp',
-                'belongingRepo',
-                'keyPhoto',
-            ],
-            where: { id: lectures[i].keyArtwork },
-        });
-        work.compressedKeyPhoto = path.join(
-            compressedURL,
-            path.basename(work.keyPhoto)
-        );
-        lectures[i].keyArtwork = work;
-
         lectures[i].numberOfStars = await model.Star_Lecture.count({
             where: { lecture: lectures[i].id },
         });
