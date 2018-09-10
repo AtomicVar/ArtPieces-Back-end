@@ -194,8 +194,8 @@ type Mutation {
         id: UUID!
         title: String!
         description: String
-        steps: JSON
-        keyPhoto: URL
+        steps: JSON!
+        keyPhoto: URL!
         creator: String!
         password: String!
         timestamp: Datetime!

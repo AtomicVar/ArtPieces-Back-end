@@ -8,6 +8,7 @@ import { Op } from 'sequelize';
 // APPCODE 用来做身份认证，防止第三方的“销毁图片”请求被执行。 
 import APPCODE from '../../APPCODE.json';
 
+// 缩略图链接前缀
 const compressedURL = 'https://artpieces.cn/img/compressed';
 
 // 检查帐号与密码是否匹配
@@ -46,7 +47,10 @@ const login = async (obj, args) => {
         attributes: ['password', 'salt'],
         where: { email: args.email },
     });
+
+    // 若用户存在，则检查帐号密码正确性
     if (user) {
+        // 将传过来的密码与盐一起做 Hash 编码
         let encodedPasswd = crypto
             .createHash('md5')
             .update(args.password + user.salt)
@@ -62,7 +66,10 @@ const login = async (obj, args) => {
                 payload: 'Access Denied: wrong password',
             };
         }
-    } else {
+    }
+
+    // 否则，用户不存在，返回相应状态消息
+    else {
         return {
             status: -3,
             payload: 'Object not found',
@@ -83,9 +90,9 @@ const getWork = async (obj, args) => {
         ],
         where: { id: args.id },
     });
-
     if (!work) return null;
 
+    // 添加作品的缩略图链接
     work.compressedKeyPhoto = path.join(
         compressedURL,
         path.basename(work.keyPhoto)
@@ -98,11 +105,9 @@ const getUser = async (obj, args) => {
         attributes: ['email', 'name', 'portrait'],
         where: { email: args.email },
     });
-    if (!user) {
-        return null;
-    }
+    if (!user) return null;
 
-    // artworks
+    // 为用户添加 artworks
     user.artworks = await model.Artwork.findAll({
         attributes: [
             'id',
@@ -115,7 +120,7 @@ const getUser = async (obj, args) => {
         where: { creator: args.email },
     });
 
-    // Add compressed URL for the portrait and keyPhotos
+    // 为 artworks 中的每个 artwork 添加缩略图链接
     user.artworks.forEach(w => {
         w.compressedKeyPhoto = path.join(
             compressedURL,
@@ -123,7 +128,7 @@ const getUser = async (obj, args) => {
         );
     });
 
-    // If the user has a portrait, provide a compressed version
+    // 如果用户有头像，那么添加头像的缩略图链接
     if (user.portrait) {
         user.compressedPortrait = path.join(
             compressedURL,
@@ -131,14 +136,15 @@ const getUser = async (obj, args) => {
         );
     }
 
-    // repos
+    // 为用户添加 repos
     user.repos = await model.Repo.findAll({
         attributes: ['id', 'title', 'keyArtwork', 'starter', 'timestamp'],
         where: { starter: args.email },
     });
 
-    // complete repos
+    // 对于 repos 中的每个 repo
     for (let i in user.repos) {
+        // 添加 repo 的 keyArtwork
         let artwork = await model.Artwork.findOne({
             attributes: [
                 'id',
@@ -150,14 +156,14 @@ const getUser = async (obj, args) => {
             ],
             where: { id: user.repos[i].keyArtwork },
         });
-        if (artwork.keyPhoto) {
-            artwork.compressedKeyPhoto = path.join(
-                compressedURL,
-                path.basename(artwork.keyPhoto)
-            );
-        }
+        // 添加 keyArtwork 的缩略图链接
+        artwork.compressedKeyPhoto = path.join(
+            compressedURL,
+            path.basename(artwork.keyPhoto)
+        );
         user.repos[i].keyArtwork = artwork;
 
+        // 添加 repo 的 artworks
         user.repos[i].artworks = await model.Artwork.findAll({
             attributes: [
                 'id',
@@ -169,25 +175,24 @@ const getUser = async (obj, args) => {
             ],
             where: { belongingRepo: user.repos[i].id },
         });
+        // 为 artworks 中的每个 artwork 添加 keyPhoto 缩略图链接
         for (let j in user.repos[i].artworks) {
-            if (user.repos[i].artworks[j].keyPhoto) {
-                user.repos[i].artworks[j].compressedKeyPhoto = path.join(
-                    compressedURL,
-                    path.basename(artwork.keyPhoto)
-                );
-            }
+            user.repos[i].artworks[j].compressedKeyPhoto = path.join(
+                compressedURL,
+                path.basename(user.repos[i].artworks[j].keyPhoto)
+            );
         }
+        // 将 keyArtwork 添加进 artworks
         user.repos[i].artworks.push(user.repos[i].keyArtwork);
 
-        user.repos[i].numberOfArtworks = await model.Artwork.count({
-            where: { belongingRepo: user.repos[i].id },
-        });
+        // 为 repo 添加 numberOfArtworks 和 numberOfStars
+        user.repos[i].numberOfArtworks = user.repos[i].artworks.length;
         user.repos[i].numberOfStars = await model.Star_Repo.count({
             where: { repo: user.repos[i].id },
         });
     }
 
-    // lectures
+    // 为用户添加 lectures
     user.lectures = await model.Lecture.findAll({
         attributes: [
             'id',
@@ -201,19 +206,20 @@ const getUser = async (obj, args) => {
         where: { creator: args.email },
     });
 
-    // complete lectures
+    // 对于 lectures 中的每个 lecture
     for (let i in user.lectures) {
+        // 添加 numberOfStars、numberOfSteps 和 keyPhoto 缩略图链接
         user.lectures[i].numberOfStars = await model.Star_Lecture.count({
             where: { lecture: user.lectures[i].id },
         });
+
         let step_json = JSON.parse(user.lectures[i].steps);
         user.lectures[i].numberOfSteps = step_json.guide ? step_json.guide.steps.length : 0;
-        if (user.lectures[i].keyPhoto) {
-            user.lectures[i].compressedKeyPhoto = path.join(
-                compressedURL,
-                path.basename(user.lectures[i].keyPhoto)
-            );
-        }
+
+        user.lectures[i].compressedKeyPhoto = path.join(
+            compressedURL,
+            path.basename(user.lectures[i].keyPhoto)
+        );
     }
 
     return user;
@@ -224,7 +230,29 @@ const getRepo = async (obj, args) => {
         attributes: ['id', 'title', 'keyArtwork', 'starter', 'timestamp'],
         where: { id: args.id },
     });
-    let artworks = await model.Artwork.findAll({
+    if (!repo) return null;
+
+    // 添加 repo 的 keyArtwork
+    let artwork = await model.Artwork.findOne({
+        attributes: [
+            'id',
+            'title',
+            'description',
+            'creator',
+            'timestamp',
+            'keyPhoto',
+        ],
+        where: { id: repo.keyArtwork },
+    });
+    // 添加 keyArtwork 的缩略图链接
+    artwork.compressedKeyPhoto = path.join(
+        compressedURL,
+        path.basename(artwork.keyPhoto)
+    );
+    repo.keyArtwork = artwork;
+
+    // 添加 repo 的 artworks
+    repo.artworks = await model.Artwork.findAll({
         attributes: [
             'id',
             'title',
@@ -235,11 +263,22 @@ const getRepo = async (obj, args) => {
         ],
         where: { belongingRepo: args.id },
     });
+    // 为 artworks 中的每个 artwork 添加 keyPhoto 缩略图链接
+    for (let i in repo.artworks) {
+        repo.artworks[i].compressedKeyPhoto = path.join(
+            compressedURL,
+            path.basename(repo.artworks[i].keyPhoto)
+        );
+    }
+    // 将 keyArtwork 添加进 artworks
+    repo.artworks.push(repo.keyArtwork);
 
-    if (!repo) return null;
+    // 为 repo 添加 numberOfArtworks 和 numberOfStars
+    repo.numberOfArtworks = repo.artworks.length;
+    repo.numberOfStars = await model.Star_Repo.count({
+        where: { repo: repo.id },
+    });
 
-    repo.artworks = artworks;
-    repo.numberOfArtworks = artworks.length;
     return repo;
 };
 
@@ -256,29 +295,32 @@ const getLecture = async (obj, args) => {
         ],
         where: { id: args.id },
     });
-
     if (!lect) return null;
 
+    // 为 lecture 添加 numberOfSteps 和 numberOfStars
     let step_json = JSON.parse(lect.steps);
     lect.numberOfSteps = step_json.guide ? step_json.guide.steps.length : 0;
     lect.numberOfStars = await model.Star_Lecture.count({
         where: { lecture: args.id },
     });
-    if (lect.keyPhoto) {
-        lect.compressedKeyPhoto = path.join(
-            compressedURL,
-            path.basename(lect.keyPhoto)
-        );
-    }
+
+    // 为 lecture 添加 keyPhoto 缩略图
+    lect.compressedKeyPhoto = path.join(
+        compressedURL,
+        path.basename(lect.keyPhoto)
+    );
+
     return lect;
 };
 
 const insertUser = async (obj, args) => {
+    // 随机生成盐并且与用户原密码连接做 Hash 编码
     let salt = crypto.randomBytes(10).toString('hex');
     let passwd = crypto
         .createHash('md5')
         .update(args.password + salt)
         .digest('hex');
+
     try {
         let user = await model.User.create({
             email: args.email,
@@ -293,12 +335,16 @@ const insertUser = async (obj, args) => {
             payload: user.email,
         };
     } catch (err) {
+        // 用户已经存在
         if (err.name == 'SequelizeUniqueConstraintError') {
             return {
                 status: -4,
                 payload: 'The target is already in the database!',
             };
-        } else {
+        }
+
+        // 其他情况
+        else {
             return {
                 status: 1,
                 payload: err,
