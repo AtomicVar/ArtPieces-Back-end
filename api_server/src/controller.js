@@ -206,6 +206,7 @@ const getUser = async (obj, args) => {
         user.lectures[i].numberOfStars = await model.Star_Lecture.count({
             where: { lecture: user.lectures[i].id },
         });
+        user.lectures[i].numberOfSteps = JSON.parse(user.lectures[i].steps).guide.steps.length;
         if (user.lectures[i].keyPhoto) {
             user.lectures[i].compressedKeyPhoto = path.join(
                 compressedURL,
@@ -257,7 +258,7 @@ const getLecture = async (obj, args) => {
 
     if (!lect) return null;
 
-    lect.numberOfSteps = lect.steps.length;
+    lect.numberOfSteps = JSON.parse(lect.steps).guide.steps.length;
     lect.numberOfStars = await model.Star_Lecture.count({
         where: { lecture: args.id },
     });
