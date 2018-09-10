@@ -96,7 +96,7 @@ const uploadServer = http.createServer((req, res) => {
         });
     }
 
-    // Download a original file
+    // 下载原始图片
     else if (req.url.startsWith('/original') && req.method == 'GET') {
         console.log('Trying download original.');
         let filePath = path.join(__dirname, req.url.slice(1));
@@ -119,7 +119,10 @@ const uploadServer = http.createServer((req, res) => {
                 });
             }
         });
-    } else if (req.url.startsWith('/compressed') && req.method == 'GET') {
+    }
+    
+    // 下载压缩图片
+    else if (req.url.startsWith('/compressed') && req.method == 'GET') {
         console.log('Trying download compressed.');
         let filePath = path.join(__dirname, req.url.slice(1));
         fs.stat(filePath, (err, stat) => {
@@ -144,7 +147,7 @@ const uploadServer = http.createServer((req, res) => {
         });
     }
 
-    // Destroy an image
+    // 销毁图片
     else if (req.url == '/destroy' && req.method == 'POST') {
         // Verify the APPCODE
         if (req.headers.appcode != APPCODE) {
@@ -176,7 +179,7 @@ const uploadServer = http.createServer((req, res) => {
         });
     }
 
-    // Malformed URL
+    // URL 格式错误
     else {
         console.log('Bad request.');
         res.statusCode = 400;

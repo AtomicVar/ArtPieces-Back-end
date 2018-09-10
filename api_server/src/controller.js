@@ -5,16 +5,12 @@ import crypto from 'crypto';
 import request from 'request-promise-native';
 import { Op } from 'sequelize';
 
-/*
- * The APPCODE is a certification used then destroying images through
- * the upload server.
- */
+// APPCODE 用来做身份认证，防止第三方的“销毁图片”请求被执行。 
 import APPCODE from '../../APPCODE.json';
 
 const compressedURL = 'https://artpieces.cn/img/compressed';
 
-// Helper functions
-
+// 检查帐号与密码是否匹配
 const passwordRight = async (email, password) => {
     let u = await model.User.findOne({
         attributes: ['password', 'salt'],
@@ -27,6 +23,7 @@ const passwordRight = async (email, password) => {
     return u.password == testedPassword;
 };
 
+// 销毁老图片
 const destroyImage = async img => {
     let options = {
         method: 'POST',
@@ -198,6 +195,7 @@ const getUser = async (obj, args) => {
             'description',
             'steps',
             'creator',
+            'keyPhoto',
             'timestamp',
         ],
         where: { creator: args.email },
@@ -246,6 +244,7 @@ const getLecture = async (obj, args) => {
             'description',
             'steps',
             'creator',
+            'keyPhoto',
             'timestamp',
         ],
         where: { id: args.id },
@@ -382,6 +381,7 @@ const insertLect = async (obj, args) => {
             description: args.description,
             steps: args.steps,
             timestamp: new Date(args.timestamp),
+            keyPhoto: args.keyPhoto,
             creator: args.creator,
         });
         return {

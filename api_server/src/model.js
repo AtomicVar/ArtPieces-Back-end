@@ -55,6 +55,7 @@ const Lecture = database.define('lecture', {
     title: STRING,
     description: STRING,
     steps: JSON,
+    keyPhoto: STRING,
     creator: STRING,
     timestamp: DATE,
 });

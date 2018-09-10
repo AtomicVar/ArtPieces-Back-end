@@ -3,7 +3,7 @@ import schema from './schema.graphql';
 import * as controller from './controller';
 import { safeLaunch } from './misc';
 
-/* Launch the server safely. */
+/* 更安全地运行服务器（防止数据库被修改）*/
 safeLaunch();
 
 const typeDefs = schema;

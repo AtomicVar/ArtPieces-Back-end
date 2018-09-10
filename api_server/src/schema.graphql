@@ -51,6 +51,7 @@ type Lecture {
     description: String
     timestamp: Datetime
     creator: User
+    keyPhoto: URL
     numberOfSteps: Int
     steps: JSON
     numberOfStars: Int
