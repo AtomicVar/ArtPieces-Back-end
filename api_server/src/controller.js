@@ -966,7 +966,7 @@ const getLectFeed = async (obj, args) => {
         },
     });
 
-    // Build up keyArtwork & creator
+    // Build up creator
     for (let i in lectures) {
         lectures[i].numberOfStars = await model.Star_Lecture.count({
             where: { lecture: lectures[i].id },
@@ -980,7 +980,7 @@ const getLectFeed = async (obj, args) => {
 
         let user = await model.User.findOne({
             attributes: ['email', 'name', 'portrait'],
-            where: { email: lectures[i].starter },
+            where: { email: lectures[i].creator },
         });
         if (user.portrait) {
             user.compressedPortrait = path.join(
@@ -1027,7 +1027,7 @@ const extendLectFeed = async (obj, args) => {
 
         let user = await model.User.findOne({
             attributes: ['email', 'name', 'portrait'],
-            where: { email: lectures[i].starter },
+            where: { email: lectures[i].creator },
         });
         if (user.portrait) {
             user.compressedPortrait = path.join(
