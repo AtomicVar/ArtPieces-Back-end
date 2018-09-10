@@ -52,6 +52,7 @@ type Lecture {
     timestamp: Datetime
     creator: User
     keyPhoto: URL
+    compressedKeyPhoto: URL
     numberOfSteps: Int
     steps: JSON
     numberOfStars: Int

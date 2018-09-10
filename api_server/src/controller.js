@@ -207,6 +207,12 @@ const getUser = async (obj, args) => {
             where: { lecture: user.lectures[i].id },
         });
         user.lectures[i].numberOfSteps = user.lectures[i].steps.length;
+        if (user.lectures[i].keyPhoto) {
+            user.lectures[i].compressedKeyPhoto = path.join(
+                compressedURL,
+                path.basename(user.lectures[i].keyPhoto)
+            );
+        }
     }
 
     return user;
@@ -256,6 +262,12 @@ const getLecture = async (obj, args) => {
     lect.numberOfStars = await model.Star_Lecture.count({
         where: { lecture: args.id },
     });
+    if (lect.keyPhoto) {
+        lect.compressedKeyPhoto = path.join(
+            compressedURL,
+            path.basename(lect.keyPhoto)
+        );
+    }
     return lect;
 };
 
@@ -977,6 +989,12 @@ const getLectFeed = async (obj, args) => {
         lectures[i].numberOfStars = await model.Star_Lecture.count({
             where: { lecture: lectures[i].id },
         });
+        if (lectures[i].keyPhoto) {
+            lectures[i].compressedKeyPhoto = path.join(
+                compressedURL,
+                path.basename(lectures[i].keyPhoto)
+            );
+        }
 
         let user = await model.User.findOne({
             attributes: ['email', 'name', 'portrait'],
@@ -1036,6 +1054,12 @@ const extendLectFeed = async (obj, args) => {
         lectures[i].numberOfStars = await model.Star_Lecture.count({
             where: { lecture: lectures[i].id },
         });
+        if (lectures[i].keyPhoto) {
+            lectures[i].compressedKeyPhoto = path.join(
+                compressedURL,
+                path.basename(lectures[i].keyPhoto)
+            );
+        }
 
         let user = await model.User.findOne({
             attributes: ['email', 'name', 'portrait'],
