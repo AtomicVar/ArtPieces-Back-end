@@ -5,7 +5,7 @@
 黑客与画家的共同之处，在于他们都是创作者。与作曲家、建筑师、作家一样，黑客和画家都是试图创作出优秀的作品。他们本质上都不是在做研究，虽然在创作的过程中，他们可能会发现一些新技术（当然那样更好）。——《黑客与画家》
 
 ---
-**这仅是参赛使用的Demo**，之后会考虑使用 TypeScript 重写，加入 JWT，并且使用 Egg.js 将两个 server 整合。
+**这仅是参赛使用的Demo**~~，之后会考虑使用 TypeScript 重写，加入 JWT，并且使用 Egg.js 将两个 server 整合。
 
 [前端地址](https://github.com/Frost-Lee/Art-Pieces-front-end)
 
